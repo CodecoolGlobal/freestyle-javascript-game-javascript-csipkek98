@@ -1,0 +1,17 @@
+.bg{
+    background: url("../img/bg.png");
+    width: 672px;
+    height: 744px;
+    display: flex;
+}
+.game-center{
+    display: flex;
+    justify-content: center;
+}
+.frog{
+    background: url("../img/frog_0.png");
+    align-self: flex-end;
+    padding-bottom: 1px;
+    width: 48px;
+    height: 48px;
+}
