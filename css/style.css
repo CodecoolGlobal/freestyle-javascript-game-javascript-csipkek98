@@ -1,8 +1,9 @@
 .bg{
-    background: url("../img/bg.png");
+    background-image: url("../img/bg.png");
     width: 672px;
     height: 744px;
     display: flex;
+    flex-flow: column;
 }
 .game-center{
     display: flex;
@@ -11,7 +12,18 @@
 .frog{
     background: url("../img/frog_0.png");
     align-self: flex-end;
-    padding-bottom: 1px;
     width: 48px;
     height: 48px;
+}
+.bg .row {
+    height: 48px;
+    display: flex;
+}
+.bg .scoreboard {
+    height: 48px;
+    display: flex;
+}
+.bg .goal {
+    height: 72px;
+    display: flex;
 }
