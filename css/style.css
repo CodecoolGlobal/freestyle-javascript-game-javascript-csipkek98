@@ -10,20 +10,40 @@
     justify-content: center;
 }
 .frog{
+    position: absolute;
     background: url("../img/frog_0.png");
     align-self: flex-end;
     width: 48px;
     height: 48px;
+    margin-left: 336px;
 }
 .bg .row {
     height: 48px;
     display: flex;
 }
 .bg .scoreboard {
+    position: relative;
     height: 48px;
     display: flex;
 }
 .bg .goal {
     height: 72px;
     display: flex;
+}
+.car{
+    position: relative;
+    background-image: url("../img/vehicle_0.png");
+    width: 42px;
+    height: 36px;
+    animation: start 5s infinite;
+    animation-timing-function: linear;
+}
+@keyframes start {
+  from {
+    margin-left: -36px;
+  }
+  to {
+    margin-left: 672px;
+
+  }
 }

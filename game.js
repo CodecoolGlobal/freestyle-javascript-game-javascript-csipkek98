@@ -18,6 +18,9 @@ function addRow(gameField) {
 for (let row = 0; row < 13; row++) {
     const rowElement = addRow(document.querySelector('.bg'));
     rowElement.setAttribute("data-row", row);
+    let car = document.createElement("div")
+    car.classList.add("car")
+    rowElement.appendChild(car)
 }
 
 let frog = document.createElement("div");
@@ -45,6 +48,24 @@ window.addEventListener("keydown", function (event) {
         let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
         let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
         f.appendChild(frog);
+
+      handled = true;
+  }
+    if (event.keyCode === 39) {
+    // Handle the event with KeyboardEvent.keyCode and set handled true.
+        let frog = document.querySelector('.frog');
+        let style = frog.currentStyle || window.getComputedStyle(frog);
+        let newPos = parseInt(style.marginLeft.replace('px', ''));
+        frog.style.marginLeft = String(newPos + 48) + "px";
+
+      handled = true;
+  }
+    if (event.keyCode === 37) {
+    // Handle the event with KeyboardEvent.keyCode and set handled true.
+        let frog = document.querySelector('.frog');
+        let style = frog.currentStyle || window.getComputedStyle(frog);
+        let newPos = parseInt(style.marginLeft.replace('px', ''));
+        frog.style.marginLeft = String(newPos - 48) + "px";
 
       handled = true;
   }
