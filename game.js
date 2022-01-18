@@ -1,8 +1,14 @@
 initGame();
 
 function initGame() {
-
-    // Your game can start here, but define separate functions, don't write everything in here :)
+const
+    let frog = document.querySelector(".frog")
+    document.addEventListener("keydown",event=> function(event){
+        event.preventDefault()
+        if(event.keyCode === 38){
+            frog.currentTarget.style.background = "red";
+        }
+    })
 
 
 }
