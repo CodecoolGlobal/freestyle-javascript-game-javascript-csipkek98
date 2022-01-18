@@ -27,6 +27,7 @@
     height: 48px;
     display: flex;
     overflow: hidden;
+    position: relative;
 }
 .bg .scoreboard {
     position: relative;
@@ -38,19 +39,53 @@
     height: 72px;
     display: flex;
 }
-.car{
-    position: relative;
+.car0, .car1, .car2, .car3, .car4 {
+    position: absolute;
+}
+
+.car4{
     background-image: url("../img/vehicle_0.png");
     width: 42px;
     height: 36px;
-    animation: start 5s 1;
-    animation-timing-function: linear;
+    animation: moveLeft 5s 1 linear;
 }
-@keyframes start {
+.car2{
+    background-image: url("../img/vehicle_1.png");
+    width: 42px;
+    height: 36px;
+    animation: moveLeft 5s 1 linear;
+}
+.car1{
+    background-image: url("../img/vehicle_2.png");
+    width: 42px;
+    height: 36px;
+    animation: moveRight 5s 1 linear;
+}
+.car3{
+    background-image: url("../img/vehicle_3.png");
+    width: 42px;
+    height: 36px;
+    animation: moveRight 5s 1 linear;
+}
+.car0{
+    background-image: url("../img/vehicle_4.png");
+    width: 70px;
+    height: 30px;
+    animation: moveLeft 5s 1 linear;
+}
+@keyframes moveRight {
   from {
     transform: translate(-50px, 0px);
   }
   to {
     transform: translate(672px, 0px);
+  }
+}
+@keyframes moveLeft {
+  from {
+    transform: translate(700px, 0px);
+  }
+  to {
+    transform: translate(-50px, 0px);
   }
 }
