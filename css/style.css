@@ -17,6 +17,12 @@
     height: 48px;
     margin-left: 336px;
 }
+.frog .jump{
+    position: absolute;
+    background: url("../img/frog_1.png");
+    width: 48px;
+    height: 48px;
+}
 .bg .row {
     height: 48px;
     display: flex;

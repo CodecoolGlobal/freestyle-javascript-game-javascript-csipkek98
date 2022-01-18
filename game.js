@@ -1,15 +1,6 @@
 initGame();
 
 function initGame() {
-const
-    let frog = document.querySelector(".frog")
-    document.addEventListener("keydown",event=> function(event){
-        event.preventDefault()
-        if(event.keyCode === 38){
-            frog.currentTarget.style.background = "red";
-        }
-    })
-
 
 }
 
@@ -51,9 +42,10 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(frog);
+        // let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
+        // let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        // f.appendChild(frog);
+        frog.
 
       handled = true;
   }
