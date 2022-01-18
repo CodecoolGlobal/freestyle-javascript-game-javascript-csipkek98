@@ -39,6 +39,7 @@
     height: 72px;
     display: flex;
 }
+
 .car0, .car1, .car2, .car3, .car4 {
     position: absolute;
 }
