@@ -1,7 +1,7 @@
 initGame();
 
 function initGame() {
-const
+/*const
     let frog = document.querySelector(".frog")
     document.addEventListener("keydown",event=> function(event){
         event.preventDefault()
@@ -9,7 +9,7 @@ const
             frog.currentTarget.style.background = "red";
         }
     })
-
+*/
 
 }
 
@@ -81,3 +81,17 @@ window.addEventListener("keydown", function (event) {
     event.preventDefault();
   }
 }, true);
+
+function getTranslateX() {
+    let car = document.querySelector('.row[data-row="12"] .car')
+  //var style = window.getComputedStyle(car);
+  //var matrix = style.getPropertyValue("transform");
+  let frog = document.querySelector('.frog')
+    //console.log('translateX: ', frog.getBoundingClientRect()['right']);
+    if(frog.getBoundingClientRect()['x'] < car.getBoundingClientRect()['right']
+        && car.getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
+    {console.log('translateX: ', car.getBoundingClientRect()['x']);}
+  //console.log('tran: ', matrix.split(','));
+}
+
+//setInterval(getTranslateX, 1)
