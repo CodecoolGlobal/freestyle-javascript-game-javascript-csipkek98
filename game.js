@@ -70,9 +70,10 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(frog);
+        // let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
+        // let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        // f.appendChild(frog);
+        frog.
 
       handled = true;
   }
@@ -101,6 +102,34 @@ window.addEventListener("keydown", function (event) {
   }
 }, true);
 
+
+// Test object's attributes
+let rect1 = {x:5, y:5, width: 50, height:50};
+let rect2 = {x:20, y:10, width: 10, height:10};
+
+function test_collision_collision () {
+    if (rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.y + rect1.height > rect2.y
+    ){
+        //collision detected
+    } else {
+        //no collision
+    }
+}
+
+function test_collision_no_collision () {
+    if (rect1.x > rect2.x + rect2.width ||
+        rect1.x + rect1.width < rect2.x ||
+        rect1.y > rect2.y + rect2.height ||
+        rect1.y + rect1.height < rect2.y
+    ){
+        //no collision
+    } else {
+        //collision detected
+    }
+}
 function getTranslateX() {
     let car = document.querySelector('.row[data-row="12"] .car')
   //var style = window.getComputedStyle(car);
@@ -114,3 +143,4 @@ function getTranslateX() {
 }
 
 //setInterval(getTranslateX, 1)
+
