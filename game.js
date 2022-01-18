@@ -26,6 +26,7 @@ function drawBoard() {
         // Road
         else if(row <= 12){
             const rowElement = addRow(board, "road", row);
+            rowElement.setAttribute("carType", row-8);
         }
         // Start
         else if(row === 13){
@@ -46,9 +47,9 @@ function addRow(gameField, classes="", row=0) {
     return gameField.lastElementChild;
 }
 
-function addCar(road){
+function addCar(road, carnumber=0){
     let car = document.createElement("div");
-    car.classList.add("car");
+    car.classList.add(`car${carnumber}`);
     road.appendChild(car);
     car.addEventListener('animationend', (event) => {
         event.currentTarget.remove();
@@ -58,9 +59,16 @@ function addCar(road){
 let roads = document.querySelectorAll('.row.road')
 for(let road of roads)
 {
-    road.addEventListener('click', function (event){
-        addCar(event.currentTarget);
-    })
+    /*road.addEventListener('click', function (event){
+        let carType = event.currentTarget.getAttribute("carType");
+        addCar(event.currentTarget, parseInt(carType));
+    })*/
+    setInterval(function (){
+        setTimeout(function (){
+            let carType = road.getAttribute("carType");
+            addCar(road, parseInt(carType));
+        }, Math.floor(Math.random()*3000+1000));
+    }, 3000);
 }
 
 let frog = document.createElement("div");
