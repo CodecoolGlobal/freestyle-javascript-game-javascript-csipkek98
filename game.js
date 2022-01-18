@@ -75,6 +75,13 @@ let frog = document.createElement("div");
 frog.classList.add('frog');
 document.querySelector('.bg').lastElementChild.appendChild(frog);
 
+frog.addEventListener('animationend', (event) => {
+    let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
+    let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+    f.appendChild(event.currentTarget);
+    event.currentTarget.removeAttribute("style");
+});
+
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Should do nothing if the default action has been cancelled
@@ -84,9 +91,8 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 38) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) - 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(frog);
+        frog.style.animation = 'jump 500ms steps(2);';
+        frog.setAttribute("style", "animation: jump 230ms steps(2);");
 
       handled = true;
   }
