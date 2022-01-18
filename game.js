@@ -41,10 +41,9 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
-        // let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
-        // let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        // f.appendChild(frog);
-        frog.
+        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
+        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        f.appendChild(frog);
 
       handled = true;
   }
@@ -103,15 +102,12 @@ function test_collision_no_collision () {
 }
 function getTranslateX() {
     let car = document.querySelector('.row[data-row="12"] .car')
-  //var style = window.getComputedStyle(car);
-  //var matrix = style.getPropertyValue("transform");
   let frog = document.querySelector('.frog')
     //console.log('translateX: ', frog.getBoundingClientRect()['right']);
     if(frog.getBoundingClientRect()['x'] < car.getBoundingClientRect()['right']
         && car.getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
     {console.log('translateX: ', car.getBoundingClientRect()['x']);}
-  //console.log('tran: ', matrix.split(','));
 }
 
-//setInterval(getTranslateX, 1)
+setInterval(getTranslateX, 1)
 
