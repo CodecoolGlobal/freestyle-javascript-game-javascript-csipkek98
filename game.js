@@ -1,34 +1,66 @@
 initGame();
 
 function initGame() {
-
-/*const
-    let frog = document.querySelector(".frog")
-    document.addEventListener("keydown",event=> function(event){
-        event.preventDefault()
-        if(event.keyCode === 38){
-            frog.currentTarget.style.background = "red";
-        }
-    })
-*/
-
-
+    drawBoard();
 }
 
-function addRow(gameField) {
+function drawBoard() {
+    const board = document.querySelector('.game-center .bg');
+    for (let row = 0; row < 15; row++) {
+        // Scoreboard
+        if(row === 0){
+            const rowElement = addRow(board, "scoreboard", row);
+        }
+        // Goal
+        else if(row === 1){
+            const rowElement = addRow(board, "goal", row);
+        }
+        // River
+        else if(row <= 6){
+            const rowElement = addRow(board, "river", row);
+        }
+        // Empty
+        else if(row === 7){
+            const rowElement = addRow(board, "", row);
+        }
+        // Road
+        else if(row <= 12){
+            const rowElement = addRow(board, "road", row);
+        }
+        // Start
+        else if(row === 13){
+            const rowElement = addRow(board, "start", row);
+        }
+        // Lives
+        else{
+            const rowElement = addRow(board, "lives", row);
+        }
+    }
+}
+
+function addRow(gameField, classes="", row=0) {
     gameField.insertAdjacentHTML(
         'beforeend',
-        '<div class="row"></div>'
+        `<div class="row ${classes}" data-row="${row}"></div>`
     );
     return gameField.lastElementChild;
 }
 
-for (let row = 0; row < 13; row++) {
-    const rowElement = addRow(document.querySelector('.bg'));
-    rowElement.setAttribute("data-row", row);
-    let car = document.createElement("div")
-    car.classList.add("car")
-    rowElement.appendChild(car)
+function addCar(road){
+    let car = document.createElement("div");
+    car.classList.add("car");
+    road.appendChild(car);
+    car.addEventListener('animationend', (event) => {
+        event.currentTarget.remove();
+    });
+}
+
+let roads = document.querySelectorAll('.row.road')
+for(let road of roads)
+{
+    road.addEventListener('click', function (event){
+        addCar(event.currentTarget);
+    })
 }
 
 let frog = document.createElement("div");
@@ -84,6 +116,34 @@ window.addEventListener("keydown", function (event) {
   }
 }, true);
 
+
+// Test object's attributes
+let rect1 = {x:5, y:5, width: 50, height:50};
+let rect2 = {x:20, y:10, width: 10, height:10};
+
+function test_collision_collision () {
+    if (rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.y + rect1.height > rect2.y
+    ){
+        //collision detected
+    } else {
+        //no collision
+    }
+}
+
+function test_collision_no_collision () {
+    if (rect1.x > rect2.x + rect2.width ||
+        rect1.x + rect1.width < rect2.x ||
+        rect1.y > rect2.y + rect2.height ||
+        rect1.y + rect1.height < rect2.y
+    ){
+        //no collision
+    } else {
+        //collision detected
+    }
+}
 function getTranslateX() {
   let frog = document.querySelector('.frog')
     let actualRow = frog.parentNode.getAttribute("data-row");
@@ -96,4 +156,7 @@ function getTranslateX() {
     }
 }
 
+
 setInterval(getTranslateX, 100)
+
+
