@@ -68,6 +68,7 @@
     width: 70px;
     height: 30px;
     animation: moveLeft 5s 1 linear;
+>>>>>>> 383ebe3594756cfeaaeef63f87b88ea4ba1be732
 }
 @keyframes moveRight {
   from {
