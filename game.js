@@ -1,33 +1,52 @@
 initGame();
 
 function initGame() {
-/*const
-    let frog = document.querySelector(".frog")
-    document.addEventListener("keydown",event=> function(event){
-        event.preventDefault()
-        if(event.keyCode === 38){
-            frog.currentTarget.style.background = "red";
-        }
-    })
-*/
-
+    drawBoard();
 }
 
-function addRow(gameField) {
+function drawBoard() {
+    const board = document.querySelector('.game-center .bg');
+    for (let row = 0; row < 15; row++) {
+        // Scoreboard
+        if(row === 0){
+            const rowElement = addRow(board, "scoreboard", row);
+        }
+        // Goal
+        else if(row === 1){
+            const rowElement = addRow(board, "goal", row);
+        }
+        // River
+        else if(row <= 6){
+            const rowElement = addRow(board, "river", row);
+        }
+        // Empty
+        else if(row === 7){
+            const rowElement = addRow(board, "", row);
+        }
+        // Road
+        else if(row <= 12){
+            const rowElement = addRow(board, "road", row);
+        }
+        // Start
+        else if(row === 13){
+            const rowElement = addRow(board, "start", row);
+        }
+        // Lives
+        else{
+            const rowElement = addRow(board, "lives", row);
+        }
+    }
+}
+
+function addRow(gameField, classes="", row=0) {
+    console.log(`${classes}`)
     gameField.insertAdjacentHTML(
         'beforeend',
-        '<div class="row"></div>'
+        `<div class="row ${classes}" data-row="${row}"></div>`
     );
     return gameField.lastElementChild;
 }
 
-for (let row = 0; row < 13; row++) {
-    const rowElement = addRow(document.querySelector('.bg'));
-    rowElement.setAttribute("data-row", row);
-    let car = document.createElement("div")
-    car.classList.add("car")
-    rowElement.appendChild(car)
-}
 
 let frog = document.createElement("div");
 frog.classList.add('frog');
