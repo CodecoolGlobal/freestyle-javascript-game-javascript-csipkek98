@@ -1,22 +1,66 @@
 initGame();
 
 function initGame() {
-    }
+    drawBoard();
+}
 
-function addRow(gameField) {
+function drawBoard() {
+    const board = document.querySelector('.game-center .bg');
+    for (let row = 0; row < 15; row++) {
+        // Scoreboard
+        if(row === 0){
+            const rowElement = addRow(board, "scoreboard", row);
+        }
+        // Goal
+        else if(row === 1){
+            const rowElement = addRow(board, "goal", row);
+        }
+        // River
+        else if(row <= 6){
+            const rowElement = addRow(board, "river", row);
+        }
+        // Empty
+        else if(row === 7){
+            const rowElement = addRow(board, "", row);
+        }
+        // Road
+        else if(row <= 12){
+            const rowElement = addRow(board, "road", row);
+        }
+        // Start
+        else if(row === 13){
+            const rowElement = addRow(board, "start", row);
+        }
+        // Lives
+        else{
+            const rowElement = addRow(board, "lives", row);
+        }
+    }
+}
+
+function addRow(gameField, classes="", row=0) {
     gameField.insertAdjacentHTML(
         'beforeend',
-        '<div class="row"></div>'
+        `<div class="row ${classes}" data-row="${row}"></div>`
     );
     return gameField.lastElementChild;
 }
 
-for (let row = 0; row < 13; row++) {
-    const rowElement = addRow(document.querySelector('.bg'));
-    rowElement.setAttribute("data-row", row);
-    let car = document.createElement("div")
-    car.classList.add("car")
-    rowElement.appendChild(car)
+function addCar(road){
+    let car = document.createElement("div");
+    car.classList.add("car");
+    road.appendChild(car);
+    car.addEventListener('animationend', (event) => {
+        event.currentTarget.remove();
+    });
+}
+
+let roads = document.querySelectorAll('.row.road')
+for(let road of roads)
+{
+    road.addEventListener('click', function (event){
+        addCar(event.currentTarget);
+    })
 }
 
 let frog = document.createElement("div");
@@ -101,13 +145,16 @@ function test_collision_no_collision () {
     }
 }
 function getTranslateX() {
-    let car = document.querySelector('.row[data-row="12"] .car')
+
   let frog = document.querySelector('.frog')
-    //console.log('translateX: ', frog.getBoundingClientRect()['right']);
-    if(frog.getBoundingClientRect()['x'] < car.getBoundingClientRect()['right']
-        && car.getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
-    {console.log('translateX: ', car.getBoundingClientRect()['x']);}
+    let actualRow = frog.parentNode.getAttribute("data-row");
+    let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car`)
+
+    for(let car=0; car<cars.length;car++){
+        if(frog.getBoundingClientRect()['x'] < cars[car].getBoundingClientRect()['right']
+            && cars[car].getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
+        {console.log("Lost Life Placeholder")}
+    }
 }
 
-setInterval(getTranslateX, 1)
-
+setInterval(getTranslateX, 100)
