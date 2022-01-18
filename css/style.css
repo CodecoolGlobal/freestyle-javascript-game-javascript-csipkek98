@@ -17,14 +17,22 @@
     height: 48px;
     margin-left: 336px;
 }
+.frog .jump{
+    position: absolute;
+    background: url("../img/frog_1.png");
+    width: 48px;
+    height: 48px;
+}
 .bg .row {
     height: 48px;
     display: flex;
+    overflow: hidden;
 }
 .bg .scoreboard {
     position: relative;
     height: 48px;
     display: flex;
+    overflow: hidden;
 }
 .bg .goal {
     height: 72px;
@@ -40,10 +48,10 @@
 }
 @keyframes start {
   from {
-    margin-left: -36px;
+    transform: translate(-200px, 0px);
   }
   to {
-    margin-left: 672px;
+    transform: translate(672px, 0px);
 
   }
 }
