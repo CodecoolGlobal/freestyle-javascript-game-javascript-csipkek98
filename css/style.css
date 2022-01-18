@@ -43,15 +43,14 @@
     background-image: url("../img/vehicle_0.png");
     width: 42px;
     height: 36px;
-    animation: start 5s infinite;
+    animation: start 5s 1;
     animation-timing-function: linear;
 }
 @keyframes start {
   from {
-    transform: translate(-200px, 0px);
+    transform: translate(-50px, 0px);
   }
   to {
     transform: translate(672px, 0px);
-
   }
 }

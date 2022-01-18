@@ -39,7 +39,6 @@ function drawBoard() {
 }
 
 function addRow(gameField, classes="", row=0) {
-    console.log(`${classes}`)
     gameField.insertAdjacentHTML(
         'beforeend',
         `<div class="row ${classes}" data-row="${row}"></div>`
@@ -47,6 +46,22 @@ function addRow(gameField, classes="", row=0) {
     return gameField.lastElementChild;
 }
 
+function addCar(road){
+    let car = document.createElement("div");
+    car.classList.add("car");
+    road.appendChild(car);
+    car.addEventListener('animationend', (event) => {
+        event.currentTarget.remove();
+    });
+}
+
+let roads = document.querySelectorAll('.row.road')
+for(let road of roads)
+{
+    road.addEventListener('click', function (event){
+        addCar(event.currentTarget);
+    })
+}
 
 let frog = document.createElement("div");
 frog.classList.add('frog');
