@@ -94,6 +94,17 @@ window.addEventListener("keydown", function (event) {
         frog.style.animation = 'jump 500ms steps(2);';
         frog.setAttribute("style", "animation: jump 230ms steps(2);");
 
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
+
+        // keyframes.appendRule("0% {
+        //     background-image: url("../img/frog_0.png");
+        // }
+        // 100% {
+        //     background-image: url("../img/frog_1.png");
+        //     transform: rotate(-180deg);
+        // })
+
       handled = true;
   }
     if (event.keyCode === 40) {
@@ -102,6 +113,9 @@ window.addEventListener("keydown", function (event) {
         let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
         let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
         f.appendChild(frog);
+
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
 
       handled = true;
   }
@@ -112,6 +126,9 @@ window.addEventListener("keydown", function (event) {
         let newPos = parseInt(style.marginLeft.replace('px', ''));
         frog.style.marginLeft = String(newPos + 48) + "px";
 
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
+
       handled = true;
   }
     if (event.keyCode === 37) {
@@ -120,6 +137,9 @@ window.addEventListener("keydown", function (event) {
         let style = frog.currentStyle || window.getComputedStyle(frog);
         let newPos = parseInt(style.marginLeft.replace('px', ''));
         frog.style.marginLeft = String(newPos - 48) + "px";
+
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
 
       handled = true;
   }
@@ -172,3 +192,4 @@ function getTranslateX() {
 }
 
 setInterval(getTranslateX, 100)
+

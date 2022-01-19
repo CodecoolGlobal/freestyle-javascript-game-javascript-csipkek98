@@ -68,7 +68,6 @@
     width: 70px;
     height: 30px;
     animation: moveLeft 5s 1 linear;
->>>>>>> 383ebe3594756cfeaaeef63f87b88ea4ba1be732
 }
 @keyframes moveRight {
   from {
@@ -86,12 +85,22 @@
     transform: translate(-100px, 0px);
   }
 }
-@keyframes jump {
+@keyframes jump_forward {
   0% {
     background-image: url("../img/frog_0.png");
   }
   100% {
     background-image: url("../img/frog_1.png");
-    transform: translate(0px, -70px);
+      transform: translate(0px, -100px);
+  }
+}
+
+@keyframes jump_left {
+  0% {
+    background-image: url("../img/frog_0.png");
+  }
+  100% {
+    background-image: url("../img/frog_1.png");
+      transform: rotate(-180deg);
   }
 }
