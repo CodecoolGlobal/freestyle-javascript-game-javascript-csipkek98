@@ -1,5 +1,4 @@
 initGame();
-let life = 5;
 function initGame() {
     drawBoard();
 }
@@ -91,8 +90,12 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 38) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
+        let style = frog.currentStyle || window.getComputedStyle(frog);
+        const root = document.querySelector(':root');
+        root.style.setProperty("--frog-margin", `${style.marginLeft}`)
         frog.style.animation = 'jump 500ms steps(2);';
         frog.setAttribute("style", "animation: jump 230ms steps(2);");
+
 
       handled = true;
   }
@@ -100,6 +103,7 @@ window.addEventListener("keydown", function (event) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
         let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
+        let style = frog.currentStyle || window.getComputedStyle(frog);
         let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
         f.appendChild(frog);
 
@@ -130,34 +134,6 @@ window.addEventListener("keydown", function (event) {
   }
 }, true);
 
-
-// Test object's attributes
-let rect1 = {x:5, y:5, width: 50, height:50};
-let rect2 = {x:20, y:10, width: 10, height:10};
-
-function test_collision_collision () {
-    if (rect1.x < rect2.x + rect2.width &&
-        rect1.x + rect1.width > rect2.x &&
-        rect1.y < rect2.y + rect2.height &&
-        rect1.y + rect1.height > rect2.y
-    ){
-        //collision detected
-    } else {
-        //no collision
-    }
-}
-
-function test_collision_no_collision () {
-    if (rect1.x > rect2.x + rect2.width ||
-        rect1.x + rect1.width < rect2.x ||
-        rect1.y > rect2.y + rect2.height ||
-        rect1.y + rect1.height < rect2.y
-    ){
-        //no collision
-    } else {
-        //collision detected
-    }
-}
 function getTranslateX() {
 
   let frog = document.querySelector('.frog')
@@ -170,10 +146,38 @@ function getTranslateX() {
         {lostLife()}
     }
 }
+function getLife(){
+    let lives = document.querySelector(".lives")
+    console.log(lives)
+    lives.setAttribute("Life","5")
+}
 function lostLife(){
-    let life = life - 1
-    console.log(life)
-    return life
+    let lives = document.querySelector(`.lives`)
+    let lifeBeforeDmg = lives.getAttribute("Life")
+    lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
+    dieAnim()
+    setTimeout(respawn,1000)
+}
+function dieAnim(){
+    let frog = document.querySelector('.frog');
+    let dieAnim = document.createElement("div");
+    dieAnim.classList.add('dieAnim');
+    frog.parentNode.appendChild(dieAnim);
+    let style = frog.currentStyle || window.getComputedStyle(frog);
+    const root = document.querySelector(':root');
+    root.style.setProperty("--frog-margin", `${style.marginLeft}`)
+    dieAnim.setAttribute("style", "animation: die-on-road 1000ms steps(4);");
+    frog.remove()
+}
+function respawn(){
+    let dieAnim = document.querySelector('.dieAnim');
+    dieAnim.remove()
+    const root = document.querySelector(':root');
+    root.style.setProperty("--frog-margin", `336px`)
+    let newFrog = document.createElement("div");
+    newFrog.classList.add('frog');
+    document.querySelector('.bg').lastElementChild.appendChild(frog);
 }
 
 setInterval(getTranslateX, 100)
+getLife();

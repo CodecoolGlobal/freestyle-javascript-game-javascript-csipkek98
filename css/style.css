@@ -1,3 +1,6 @@
+:root{
+    --frog-margin: 336px
+}
 .bg{
     background-image: url("../img/bg.png");
     width: 672px;
@@ -16,13 +19,7 @@
     align-self: flex-end;
     width: 48px;
     height: 48px;
-    margin-left: 336px;
-}
-.frog .jump{
-    position: absolute;
-    background: url("../img/frog_1.png");
-    width: 48px;
-    height: 48px;
+    margin-left: var(--frog-margin)
 }
 .bg .row {
     height: 48px;
@@ -88,19 +85,67 @@
 @keyframes jump {
   0% {
     background-image: url("../img/frog_0.png");
+      margin-left: var(--frog-margin);
   }
 100% {
     background-image: url("../img/frog_1.png");
-    transform: translate(0px, -70px);
+    margin-left: var(--frog-margin);
   }
 }
-
-.life{
+@keyframes die-on-road{
+    0% {
+    background-image: url("../img/death_road_0.png");
+        margin-left: var(--frog-margin);
+        width: 40px;
+        height: 40px;
+    }
+    33%{
+    background-image: url("../img/death_road_1.png");
+        margin-left: var(--frog-margin);
+        width: 40px;
+        height: 40px;
+    }
+    66%{
+    background-image: url("../img/death_road_2.png");
+        margin-left: var(--frog-margin);
+        width: 40px;
+        height: 40px;
+    }
+    100% {
+    background-image: url("../img/death_road_3.png");
+        margin-left: var(--frog-margin);
+        width: 40px;
+        height: 40px;
+  }
+}
+.lives5{
     background: url("../img/life.png");
     width: 18px;
     height: 17px;
     position: absolute;
-    display: flex;
-    justify-content: end;
+}
+.lives4{
+    background: url("../img/life.png");
+    width: 18px;
+    height: 17px;
+    position: absolute;
+}
+.lives3{
+    background: url("../img/life.png");
+    width: 18px;
+    height: 17px;
+    position: absolute;
+}
+.lives2{
+    background: url("../img/life.png");
+    width: 18px;
+    height: 17px;
+    position: absolute;
+}
+.lives1{
+    background: url("../img/life.png");
+    width: 18px;
+    height: 17px;
+    position: absolute;
 }
 
