@@ -89,7 +89,7 @@
   0% {
     background-image: url("../img/frog_0.png");
   }
-  100% {
+100% {
     background-image: url("../img/frog_1.png");
       transform: translate(0px, -100px);
   }
@@ -104,3 +104,13 @@
       transform: rotate(-180deg);
   }
 }
+
+.life{
+    background: url("../img/life.png");
+    width: 18px;
+    height: 17px;
+    position: absolute;
+    display: flex;
+    justify-content: end;
+}
+
