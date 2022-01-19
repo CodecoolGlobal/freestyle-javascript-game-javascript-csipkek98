@@ -17,6 +17,7 @@ function drawBoard() {
         // River
         else if(row <= 6){
             const rowElement = addRow(board, "river", row);
+            rowElement.setAttribute("riverType", row-2);
         }
         // Empty
         else if(row === 7){
@@ -54,6 +55,25 @@ function addCar(road, carnumber=0){
         event.currentTarget.remove();
     });
 }
+function addRiverObjects(river, riverNumber=0){
+    let object = document.createElement("div");
+    object.classList.add(`river${riverNumber}`);
+    river.appendChild(object);
+    object.addEventListener('animationend', (event) => {
+        event.currentTarget.remove();
+    });
+}
+
+let rivers = document.querySelectorAll('.row.river')
+for(let river of rivers){
+    setInterval(function (){
+        setTimeout(function (){
+            let riverType = river.getAttribute("riverType");
+            addRiverObjects(river, parseInt(riverType));
+        }, Math.floor(Math.random()*3000+1000));
+    }, 3000);
+}
+
 
 let roads = document.querySelectorAll('.row.road')
 for(let road of roads)
@@ -74,6 +94,7 @@ let frog = document.createElement("div");
 frog.classList.add('frog');
 document.querySelector('.bg').lastElementChild.appendChild(frog);
 
+// kakás ha nem előre ugrik :/
 frog.addEventListener('animationend', (event) => {
     let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
     let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
@@ -86,6 +107,7 @@ window.addEventListener("keydown", function (event) {
     return; // Should do nothing if the default action has been cancelled
   }
 
+  //up
   var handled = false;
     if (event.keyCode === 38) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
@@ -101,19 +123,22 @@ window.addEventListener("keydown", function (event) {
       handled = true;
       }
   }
+    //down
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
+        if (frog){
         let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
         let style = frog.currentStyle || window.getComputedStyle(frog);
         let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
         f.appendChild(frog);
 
         let margin = frog.currentStyle || window.getComputedStyle(frog)
-        console.log("Current marginLeft: " + margin.marginLeft)
 
       handled = true;
+        }
   }
+    //right
     if (event.keyCode === 39) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
@@ -122,19 +147,21 @@ window.addEventListener("keydown", function (event) {
         frog.style.marginLeft = String(newPos + 48) + "px";
 
         let margin = frog.currentStyle || window.getComputedStyle(frog)
-        console.log("Current marginLeft: " + margin.marginLeft)
 
       handled = true;
   }
+    //left
     if (event.keyCode === 37) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
         let style = frog.currentStyle || window.getComputedStyle(frog);
+        const root = document.querySelector(':root');
+        root.style.setProperty("--frog-margin", `${style.marginLeft}`)
+        frog.style.animation = 'jump_left 50ms steps(1);';
         let newPos = parseInt(style.marginLeft.replace('px', ''));
-        frog.style.marginLeft = String(newPos - 48) + "px";
+        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
+        frog.setAttribute("style", "animation: jump_left 150ms steps(2);");
 
-        let margin = frog.currentStyle || window.getComputedStyle(frog)
-        console.log("Current marginLeft: " + margin.marginLeft)
 
       handled = true;
   }
