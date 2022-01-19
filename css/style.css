@@ -73,7 +73,6 @@
     width: 70px;
     height: 30px;
     animation: moveLeft 5s 1 linear;
->>>>>>> 383ebe3594756cfeaaeef63f87b88ea4ba1be732
 }
 @keyframes moveRight {
   from {
@@ -90,4 +89,12 @@
   to {
     transform: translate(-50px, 0px);
   }
+}
+.life{
+    background: url("../img/life.png");
+    width: 18px;
+    height: 17px;
+    position: absolute;
+    display: flex;
+    justify-content: end;
 }

@@ -1,5 +1,5 @@
 initGame();
-
+let life = 5;
 function initGame() {
     drawBoard();
 }
@@ -156,13 +156,18 @@ function getTranslateX() {
 
   let frog = document.querySelector('.frog')
     let actualRow = frog.parentNode.getAttribute("data-row");
-    let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car`)
-
+    let cartype = document.querySelector(`.row[data-row="${actualRow}"]`).getAttribute("cartype")
+    let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
     for(let car=0; car<cars.length;car++){
         if(frog.getBoundingClientRect()['x'] < cars[car].getBoundingClientRect()['right']
             && cars[car].getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
-        {console.log("Lost Life Placeholder")}
+        {lostLife()}
     }
+}
+function lostLife(){
+    let life = life - 1
+    console.log(life)
+    return life
 }
 
 setInterval(getTranslateX, 100)
