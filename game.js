@@ -90,13 +90,16 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 38) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
+        if(frog){
         let style = frog.currentStyle || window.getComputedStyle(frog);
+        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) -1;
         const root = document.querySelector(':root');
         root.style.setProperty("--frog-margin", `${style.marginLeft}`)
-        frog.style.animation = 'jump 500ms steps(2);';
-        frog.setAttribute("style", "animation: jump 230ms steps(2);");
-
+        frog.style.animation = 'jump_forward 50ms steps(2);';
+        frog.setAttribute("style", "animation: jump_forward 150ms steps(2);");
+        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
       handled = true;
+      }
   }
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
@@ -145,6 +148,7 @@ window.addEventListener("keydown", function (event) {
 function getTranslateX() {
 
   let frog = document.querySelector('.frog')
+    if (frog){
     let actualRow = frog.parentNode.getAttribute("data-row");
     let cartype = document.querySelector(`.row[data-row="${actualRow}"]`).getAttribute("cartype")
     let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
@@ -153,6 +157,7 @@ function getTranslateX() {
             && cars[car].getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
         {lostLife()}
     }
+}
 }
 function getLife(){
     let lives = document.querySelector(".lives")
@@ -164,7 +169,13 @@ function lostLife(){
     let lifeBeforeDmg = lives.getAttribute("Life")
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
     dieAnim()
-    setTimeout(respawn,1000)
+    if (lives.getAttribute("Life") === "0"){
+        gameOver()
+    }else{
+    setTimeout(respawn,1000)}
+}
+function gameOver(){
+    console.log("dead")
 }
 function dieAnim(){
     let frog = document.querySelector('.frog');
