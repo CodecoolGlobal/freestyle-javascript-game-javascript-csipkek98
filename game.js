@@ -96,7 +96,6 @@ window.addEventListener("keydown", function (event) {
         frog.style.animation = 'jump 500ms steps(2);';
         frog.setAttribute("style", "animation: jump 230ms steps(2);");
 
-
       handled = true;
   }
     if (event.keyCode === 40) {
@@ -107,6 +106,9 @@ window.addEventListener("keydown", function (event) {
         let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
         f.appendChild(frog);
 
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
+
       handled = true;
   }
     if (event.keyCode === 39) {
@@ -116,6 +118,9 @@ window.addEventListener("keydown", function (event) {
         let newPos = parseInt(style.marginLeft.replace('px', ''));
         frog.style.marginLeft = String(newPos + 48) + "px";
 
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
+
       handled = true;
   }
     if (event.keyCode === 37) {
@@ -124,6 +129,9 @@ window.addEventListener("keydown", function (event) {
         let style = frog.currentStyle || window.getComputedStyle(frog);
         let newPos = parseInt(style.marginLeft.replace('px', ''));
         frog.style.marginLeft = String(newPos - 48) + "px";
+
+        let margin = frog.currentStyle || window.getComputedStyle(frog)
+        console.log("Current marginLeft: " + margin.marginLeft)
 
       handled = true;
   }

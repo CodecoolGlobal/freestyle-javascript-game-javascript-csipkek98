@@ -82,7 +82,7 @@
     transform: translate(-100px, 0px);
   }
 }
-@keyframes jump {
+@keyframes jump_forward {
   0% {
     background-image: url("../img/frog_0.png");
       margin-left: var(--frog-margin);
@@ -90,6 +90,16 @@
 100% {
     background-image: url("../img/frog_1.png");
     margin-left: var(--frog-margin);
+  }
+}
+
+@keyframes jump_left {
+  0% {
+    background-image: url("../img/frog_0.png");
+  }
+  100% {
+    background-image: url("../img/frog_1.png");
+      transform: rotate(-180deg);
   }
 }
 @keyframes die-on-road{
