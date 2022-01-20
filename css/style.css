@@ -84,7 +84,7 @@
     background-image: url("../img/turtle_two_0.png");
     width: 82px;
     height: 32px;
-    animation: moveRight 15s 1 linear;
+    animation: moveRight 15s 1 linear, swimming2 1500ms infinite linear;
 }
 .river2{
     background-image: url("../img/log_2.png");
@@ -102,7 +102,7 @@
     background-image: url("../img/turtle_three_0.png");
     width: 124px;
     height: 32px;
-    animation: moveRight 15s 1 linear;
+    animation: moveRight 15s 1 linear, swimming3 1500ms infinite linear;
 }
 @keyframes moveRight {
   from {
@@ -119,6 +119,29 @@
   to {
     transform: translate(-150px, 0px);
   }
+}
+
+@keyframes swimming2 {
+  0% {
+    background-image: url("../img/turtle_two_0.png");
+  }
+    50% {
+    background-image: url("../img/turtle_two_1.png");
+  }
+    100%{
+        background-image: url("../img/turtle_two_2.png");
+    }
+}
+@keyframes swimming3 {
+  0% {
+    background-image: url("../img/turtle_three_0.png");
+  }
+    50% {
+    background-image: url("../img/turtle_three_1.png");
+  }
+    100%{
+        background-image: url("../img/turtle_three_2.png");
+    }
 }
 @keyframes jump_forward {
   0% {
@@ -192,6 +215,24 @@
         width: 40px;
         height: 40px;
   }
+}
+@keyframes die-on-water{
+    0% {
+    background-image: url("../img/death_water_0.png");
+    }
+    50%{
+    background-image: url("../img/death_water_1.png");
+    }
+    100%{
+    background-image: url("../img/death_water_2.png");
+    }
+}
+.drown{
+    position: fixed;
+    margin-left: var(--frog-margin);
+    width: 42px;
+    height: 40px;
+    animation: die-on-water 1s 1 linear;
 }
 .life{
     background: url("../img/life.png");

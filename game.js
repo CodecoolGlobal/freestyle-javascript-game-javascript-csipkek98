@@ -107,13 +107,22 @@ function getBoat(rowNumber, playerLeft, playerRight){
     }
     return null;
 }
-function getOnBoat(boat, player){
-    let boatLeft = boat.getBoundingClientRect()["left"];
+function getOnBoat(rowNumber, player){
     let playerLeft = player.getBoundingClientRect()["left"];
-    const root = document.querySelector(':root');
-    let newPos = parseInt(playerLeft) - parseInt(boatLeft);
-    boat.appendChild(player);
-    root.style.setProperty("--frog-margin", `${newPos+"px"}`);
+    let playerRight = player.getBoundingClientRect()["right"];
+    let boat = getBoat(rowNumber, playerLeft, playerRight)
+    if(boat){
+        let boatLeft = boat.getBoundingClientRect()["left"];
+        const root = document.querySelector(':root');
+        let newPos = parseInt(playerLeft) - parseInt(boatLeft);
+        boat.appendChild(player);
+        root.style.setProperty("--frog-margin", `${newPos+"px"}`);
+    }
+    else {
+        let row = document.querySelector(`.game-center .bg .row[data-row="${rowNumber}"]`);
+        row.appendChild(player);
+        drown(player);
+    }
 }
 
 function getOffBoat(player, direction){
@@ -134,13 +143,8 @@ function jumpBackAndForth(player, direction){
         let newRow = parseInt(row.getAttribute("data-row")) - direction;
         if ([...Array(15).keys()].includes(newRow)) {
             let field = document.querySelector(`.game-center .bg .row[data-row="${newRow}"]`);
-            let right = player.getBoundingClientRect()["right"];
-            let left = player.getBoundingClientRect()["left"];
             if(field.classList.contains("river")){
-                let boat = getBoat(newRow, left, right);
-                if(boat){
-                    getOnBoat(boat, player)
-                }
+                getOnBoat(newRow, frog);
             }
             else {
                 field.appendChild(player);
@@ -149,11 +153,23 @@ function jumpBackAndForth(player, direction){
         }
     }
 }
+function drown(player){
+    let row = player.parentElement;
+    player.remove();
+    let drowning = document.createElement("div");
+    drowning.classList.add("drown");
+    drowning.addEventListener("animationend", event => {
+        event.currentTarget.remove();
+        lostLife();
+        event.stopPropagation();
+    })
+    row.appendChild(drowning);
+}
 let frog = document.querySelector('.frog');
 frog.addEventListener('animationend', (event) => {
     let anim = event.currentTarget.style.animationName;
     const root = document.querySelector(':root');
-    let frog = document.querySelector('.frog');
+    let frog = event.currentTarget;
     let style = frog.currentStyle || window.getComputedStyle(frog);
     if (anim === "jump_forward"){
         jumpBackAndForth(event.currentTarget, 1);
@@ -234,7 +250,10 @@ function getTranslateX() {
     for(let car=0; car<cars.length;car++){
         if(frog.getBoundingClientRect()['x'] < cars[car].getBoundingClientRect()['right']
             && cars[car].getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
-        {lostLife()}
+        {
+            dieAnim();
+            lostLife();
+        }
     }
 }
 }
@@ -253,7 +272,6 @@ function lostLife(){
     const root = document.querySelector(':root');
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
     root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
-    dieAnim()
     if (lives.getAttribute("Life") === "0"){
         gameOver()
     }else{
