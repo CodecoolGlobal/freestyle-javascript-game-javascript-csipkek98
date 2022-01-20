@@ -1,4 +1,5 @@
 let loop;
+let fps = 1000/60;
 
 initGame();
 function initGame() {
@@ -194,6 +195,7 @@ function getLife(){
     console.log(lives)
     lives.setAttribute("Life","5")
 }
+
 function lostLife(){
     let lives = document.querySelector(`.lives`)
     let lifeBeforeDmg = lives.getAttribute("Life")
@@ -206,9 +208,7 @@ function lostLife(){
     }else{
     setTimeout(respawn,1000)}
 }
-function gameOver(){
-    console.log("dead")
-}
+
 function dieAnim(){
     let frog = document.querySelector('.frog');
     let dieAnim = document.createElement("div");
@@ -233,6 +233,24 @@ function respawn(){
 setInterval(getTranslateX, 1)
 getLife();
 
+//////////////////////////////////////////////////////////////////////////
+function start() {
+    initGame();
+    loop = setInterval(update, fps);
+}
+
+function update() {
+    drawBoard();
+}
+
+function launchIfReady() {
+    let startDiv = document.getElementById("start");
+    let gameCenter = document.getElementsByClassName("game-center");
+    let gameOver = document.getElementById("game-over");
+    startDiv.style.display = "block";
+    gameCenter.style.display = "none";
+    gameOver.style.display = "none";
+}
 
 function startGame() {
     let startDiv = document.getElementById("start");
