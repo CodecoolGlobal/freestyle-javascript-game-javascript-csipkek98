@@ -93,6 +93,7 @@ function getMinWait(objectName){
     object.remove();
     return Math.floor(duration * (width));
 }
+
 function spawnFrog(){
     let frog = document.createElement("div");
     frog.classList.add('frog');
@@ -129,7 +130,6 @@ function getOnBoat(rowNumber, player){
         drown(player);
     }
 }
-
 function getOffBoat(player){
     let playerLeft = player.getBoundingClientRect()["left"];
     let rowLeft = player.parentElement.parentElement.getBoundingClientRect()["left"];
@@ -192,72 +192,60 @@ function jumpLeftAndRight(player, direction){
 }
 function moveFrog(frog){
     if(frog){
-    frog.addEventListener('animationend', (event) => {
-        let anim = event.currentTarget.style.animationName;
-        if (anim === "jump_forward"){
-            jumpBackAndForth(event.currentTarget, 1);
-        } else if(anim === "jump_backward"){
-            jumpBackAndForth(event.currentTarget, -1);
-            event.currentTarget.style.setProperty("transform", "rotate(-180deg)")
-        } else if(anim === "jump_left"){
-            jumpLeftAndRight(event.currentTarget, 1);
-            event.currentTarget.style.setProperty("transform", "rotate(-90deg)")
-        } else if(anim === "jump_right"){
-            jumpLeftAndRight(event.currentTarget, -1);
-            event.currentTarget.style.setProperty("transform", "rotate(90deg)")
-        }
-        event.stopPropagation();
-});
-}
+        frog.addEventListener('animationend', (event) => {
+            let anim = event.currentTarget.style.animationName;
+            if (anim === "jump_forward"){
+                jumpBackAndForth(event.currentTarget, 1);
+            } else if(anim === "jump_backward"){
+                jumpBackAndForth(event.currentTarget, -1);
+                event.currentTarget.style.setProperty("transform", "rotate(-180deg)")
+            } else if(anim === "jump_left"){
+                jumpLeftAndRight(event.currentTarget, 1);
+                event.currentTarget.style.setProperty("transform", "rotate(-90deg)")
+            } else if(anim === "jump_right"){
+                jumpLeftAndRight(event.currentTarget, -1);
+                event.currentTarget.style.setProperty("transform", "rotate(90deg)")
+            }
+            event.stopPropagation();
+        });
+    }
 }
 function frogAnim(){
-window.addEventListener("keydown", function (event) {
-  if (event.defaultPrevented) {
-    return; // Should do nothing if the default action has been cancelled
-  }
+    window.addEventListener("keydown", function (event) {
+      if (event.defaultPrevented) {
+        return; // Should do nothing if the default action has been cancelled
+      }
+      let handled = false;
+      let frog = document.querySelector('.frog');
+      if(frog) {
+          switch (event.code){
+              case 'ArrowUp':
+                  frog.setAttribute("style", "animation: jump_forward 150ms steps(2);");
+                  handled = true;
+                  break;
+              case 'ArrowDown':
+                  frog.setAttribute("style", "animation: jump_backward 150ms steps(2);");
+                  handled = true;
+                  break;
+              case 'ArrowRight':
+                  frog.setAttribute("style", "animation: jump_right 150ms steps(2);");
+                  handled = true;
+                  break;
+              case 'ArrowLeft':
+                  frog.setAttribute("style", "animation: jump_left 150ms steps(2);");
+                  handled = true;
+                  break;
+              default:
+                  break;
+          }
 
-  let handled = false;
-  const root = document.querySelector(':root');
-  let frog = document.querySelector('.frog');
-  if(frog) {
-      let style = frog.currentStyle || window.getComputedStyle(frog);
-      //up
-      if (event.keyCode === 38) {
-          // Handle the event with KeyboardEvent.keyCode and set handled true.
-          root.style.setProperty("--frog-margin", `${style.marginLeft}`)
-          frog.style.animation = 'jump_forward 50ms steps(2);';
-          frog.setAttribute("style", "animation: jump_forward 150ms steps(2);");
-          handled = true;
+          if (handled) {
+              // Suppress "double action" if event handled
+              event.preventDefault();
+          }
       }
-      //down
-      if (event.keyCode === 40) {
-      // Handle the event with KeyboardEvent.keyCode and set handled true.
-          root.style.setProperty("--frog-margin", `${style.marginLeft}`)
-          frog.style.animation = 'jump_backward 50ms steps(2);';
-          frog.setAttribute("style", "animation: jump_backward 150ms steps(2);");
-          handled = true;
-      }
-      //right
-      if (event.keyCode === 39) {
-          // Handle the event with KeyboardEvent.keyCode and set handled true.
-          frog.style.animation = 'jump_right 50ms steps(1);';
-          frog.setAttribute("style", "animation: jump_right 150ms steps(2);");
-          handled = true;
-      }
-      //left
-      if (event.keyCode === 37) {
-          // Handle the event with KeyboardEvent.keyCode and set handled true.
-          frog.style.animation = 'jump_left 50ms steps(1);';
-          frog.setAttribute("style", "animation: jump_left 150ms steps(2);");
-          handled = true;
-      }
-
-      if (handled) {
-          // Suppress "double action" if event handled
-          event.preventDefault();
-      }
-  }
-}, true);}
+    }, true);
+}
 
 function getTranslateX() {
   let frog = document.querySelector('.frog')
@@ -265,7 +253,7 @@ function getTranslateX() {
         let actualRow = frog.parentElement.getAttribute("data-row");
         let cartype = frog.parentElement.getAttribute("cartype")
         let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
-        let left = frog.getBoundingClientRect()['x'];
+        let left = frog.getBoundingClientRect()['left'];
         let right = frog.getBoundingClientRect()['right'];
         for(let car of cars){
             if(left < car.getBoundingClientRect()['right']
@@ -284,7 +272,6 @@ function getLife(){
     lives.appendChild(lifeFrogs);
     lives.setAttribute("Life","5")
     root.style.setProperty("--frog-life","72px")
-
 }
 
 function lostLife(){
@@ -294,7 +281,7 @@ function lostLife(){
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
     root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
     if (lives.getAttribute("Life") === "0"){
-        gameOver()
+        gameOver();
     }else{
     respawn();}
 }
@@ -324,11 +311,7 @@ function addFinish(){
     let goal = document.querySelector('.goal')
     for(let i=0;i<5;i++) {
         let finish = document.createElement("div");
-        if (i === 0) {
-            finish.classList.add('finish-empty0');
-        } else if (i > 0) {
-            finish.classList.add('finish-empty1');
-        }
+        finish.classList.add('finish-empty');
         goal.appendChild(finish);
     }
 }
