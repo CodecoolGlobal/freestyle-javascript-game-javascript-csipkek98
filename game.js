@@ -8,7 +8,6 @@ function initGame() {
     getLife();
     setTimeout(spawnFrog,2500)
     frogAnim();
-    setInterval(moveFrog,100)
     setInterval(getTranslateX, 1)
     animateObject("river", "river");
     animateObject("road", "car");
@@ -95,9 +94,10 @@ function getMinWait(objectName){
     return Math.floor(duration * (width));
 }
 function spawnFrog(){
-let frog = document.createElement("div");
-frog.classList.add('frog');
-document.querySelector('.bg').lastElementChild.appendChild(frog);
+    let frog = document.createElement("div");
+    frog.classList.add('frog');
+    moveFrog(frog);
+    document.querySelector('.bg').lastElementChild.appendChild(frog);
 }
 
 function getBoat(rowNumber, playerLeft, playerRight){
@@ -178,32 +178,35 @@ function jumpLeftAndRight(player, direction){
     let newPos = parseInt(oldPos.replace('px', ''))-48*direction;
     let parentStyle = window.getComputedStyle(player.parentElement);
     let border = parseInt(parentStyle.getPropertyValue("width").replace('px', ''))
-    if(0 <= newPos + 24 && newPos < border - 24) {
+    if(0 <= newPos + 24 && newPos - 10 < border) {
         root.style.setProperty("--frog-margin", `${newPos + "px"}`)
         player.removeAttribute("style");
     }
     else{
         if(player.parentElement.classList.contains("object")){
+            root.style.setProperty("--frog-margin", `${newPos + "px"}`)
             getOffBoat(player);
             drown(player);
         }
     }
 }
-function moveFrog(){
-let frog = document.querySelector('.frog');
-if(frog){
-frog.addEventListener('animationend', (event) => {
-    let anim = event.currentTarget.style.animationName;
-    if (anim === "jump_forward"){
-        jumpBackAndForth(event.currentTarget, 1);
-    } else if(anim === "jump_backward"){
-        jumpBackAndForth(event.currentTarget, -1);
-    } else if(anim === "jump_left"){
-        jumpLeftAndRight(event.currentTarget, 1);
-    } else if(anim === "jump_right"){
-        jumpLeftAndRight(event.currentTarget, -1);
-    }
-    event.stopPropagation();
+function moveFrog(frog){
+    if(frog){
+    frog.addEventListener('animationend', (event) => {
+        let anim = event.currentTarget.style.animationName;
+        if (anim === "jump_forward"){
+            jumpBackAndForth(event.currentTarget, 1);
+        } else if(anim === "jump_backward"){
+            jumpBackAndForth(event.currentTarget, -1);
+            event.currentTarget.style.setProperty("transform", "rotate(-180deg)")
+        } else if(anim === "jump_left"){
+            jumpLeftAndRight(event.currentTarget, 1);
+            event.currentTarget.style.setProperty("transform", "rotate(-90deg)")
+        } else if(anim === "jump_right"){
+            jumpLeftAndRight(event.currentTarget, -1);
+            event.currentTarget.style.setProperty("transform", "rotate(90deg)")
+        }
+        event.stopPropagation();
 });
 }
 }
@@ -313,6 +316,7 @@ function respawn(){
     root.style.setProperty("--frog-margin", `336px`)
     let newFrog = document.createElement("div");
     newFrog.classList.add('frog');
+    moveFrog(newFrog);
     document.querySelector('.bg').lastElementChild.appendChild(newFrog);
 }
 
