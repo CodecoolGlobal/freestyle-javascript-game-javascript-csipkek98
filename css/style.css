@@ -288,3 +288,28 @@ body {
 }
 
 #start a:hover, #game-over a:hover { background-color: #ffffff; color: #1bafdb; }
+
+.finish-empty0{
+    width: 58px;
+    height: 48px;
+    margin-left: 40px;
+    position: relative;
+    align-self: end;
+    display: flex;
+}
+.finish-empty1{
+    width: 58px;
+    height: 48px;
+    margin-left: 76px;
+    position: relative;
+    align-self: end;
+    display: flex;
+}
+.goal-frog{
+    background-image: url("../img/goal_frog_0.png");
+    width: 34px;
+    height: 40px;
+    align-self: center;
+    margin: auto;
+}
+

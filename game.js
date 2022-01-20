@@ -4,6 +4,7 @@ let fps = 1000/60;
 initGame();
 function initGame() {
     drawBoard();
+    addFinish();
     spawnFrog();
     animateObject("river", "river");
     animateObject("road", "car");
@@ -262,7 +263,6 @@ function getLife(){
     let lifeFrogs = document.createElement("div");
     lifeFrogs.classList.add('life');
     lives.appendChild(lifeFrogs);
-    console.log(lives)
     lives.setAttribute("Life","5")
 }
 
@@ -273,6 +273,7 @@ function lostLife(){
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
     root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
     if (lives.getAttribute("Life") === "0"){
+        console.log("dead")
         gameOver()
     }else{
     setTimeout(respawn,1000)}
@@ -298,45 +299,58 @@ function respawn(){
     newFrog.classList.add('frog');
     document.querySelector('.bg').lastElementChild.appendChild(frog);
 }
+function addFinish(){
+    let goal = document.querySelector('.goal')
+    for(let i=0;i<5;i++) {
+        let finish = document.createElement("div");
+        if (i === 0) {
+            finish.classList.add('finish-empty0');
+        } else if (i > 0) {
+            finish.classList.add('finish-empty1');
+        }
+        goal.appendChild(finish);
+    }
+}
 
 setInterval(getTranslateX, 1)
 getLife();
 
 //////////////////////////////////////////////////////////////////////////
-function start() {
-    initGame();
-    loop = setInterval(update, fps);
-}
-
-function update() {
-    drawBoard();
-}
+// function start() {
+//     initGame();
+//     loop = setInterval(update, fps);
+// }
+//
+// function update() {
+//     drawBoard();
+// }
 
 function launchIfReady() {
     let startDiv = document.getElementById("start");
-    let gameCenter = document.getElementsByClassName("game-center");
+    // let gameCenter = document.getElementsByClassName("game-center");
     let gameOver = document.getElementById("game-over");
     startDiv.style.display = "block";
-    gameCenter.style.display = "none";
+    // gameCenter.style.display = "none";
     gameOver.style.display = "none";
 }
 
 function startGame() {
     let startDiv = document.getElementById("start");
-    let gameCenter = document.getElementsByClassName("game-center");
+    // let gameCenter = document.getElementsByClassName("game-center");
     let gameOver = document.getElementById("game-over");
     startDiv.style.display = "none";
-    gameCenter.style.display = "block";
+    // gameCenter.style.display = "block";
     gameOver.style.display = "none";
-    start();
+    getLife()
+    spawnFrog()
 }
 
 function gameOver() {
     let startDiv = document.getElementById("start");
-    let gameCenter = document.getElementsByClassName("game-center");
+    // let gameCenter = document.getElementsByClassName("game-center");
     let gameOver = document.getElementById("game-over");
     startDiv.style.display = "none";
-    gameCenter.style.display = "none";
+    // gameCenter.style.display = "none";
     gameOver.style.display = "block";
 
     clearInterval(loop);
