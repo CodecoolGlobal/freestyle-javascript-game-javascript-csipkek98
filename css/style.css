@@ -306,4 +306,18 @@ body {
     align-self: center;
     margin: auto;
 }
+.scoreboard{
+    flex-flow: column;
+    align-items: flex-start;
+}
+@font-face {
+  font-family: myFirstFont;
+  src: url("../img/ARCADECLASSIC.TTF") format("truetype");
+}
+p{
+    margin: 0;
+    font-family: myFirstFont;
+    font-size: 24px;
+    color: #ffffff;
+}
 

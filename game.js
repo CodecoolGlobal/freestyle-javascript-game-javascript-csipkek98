@@ -11,6 +11,7 @@ function initGame() {
     setInterval(getTranslateX, 1)
     animateObject("river", "river");
     animateObject("road", "car");
+    initScoreBoard();
 }
 
 function drawBoard() {
@@ -98,7 +99,7 @@ function spawnFrog(){
     let frog = document.createElement("div");
     frog.classList.add('frog');
     moveFrog(frog);
-    document.querySelector('.bg').lastElementChild.appendChild(frog);
+    document.querySelector('.bg .start').appendChild(frog);
 }
 
 function getBoat(rowNumber, playerLeft, playerRight){
@@ -108,6 +109,8 @@ function getBoat(rowNumber, playerLeft, playerRight){
         let right = boat.getBoundingClientRect()["right"];
         let left = boat.getBoundingClientRect()["left"];
         if(left-16 <= playerLeft && right+16 >= playerRight){
+            updateScore(row);
+            row.classList.add('reached');
             return boat;
         }
     }
@@ -148,7 +151,7 @@ function jumpBackAndForth(player, direction){
     }
     else {
         let newRow = parseInt(row.getAttribute("data-row")) - direction;
-        if ([...Array(15).keys()].includes(newRow)) {
+        if ([...Array(14).keys()].includes(newRow)) {
             let field = document.querySelector(`.game-center .bg .row[data-row="${newRow}"]`);
             if(field.classList.contains("river")){
                 getOnBoat(newRow, frog);
@@ -158,6 +161,8 @@ function jumpBackAndForth(player, direction){
             }
             else {
                 field.appendChild(player);
+                updateScore(field);
+                field.classList.add("reached");
             }
             player.removeAttribute("style");
         }
@@ -303,12 +308,13 @@ function drown(player){
     row.appendChild(drowning);
 }
 function respawn(){
+    resetScoreRows();
     const root = document.querySelector(':root');
     root.style.setProperty("--frog-margin", `336px`)
     let newFrog = document.createElement("div");
     newFrog.classList.add('frog');
     moveFrog(newFrog);
-    document.querySelector('.bg').lastElementChild.appendChild(newFrog);
+    document.querySelector('.bg .start').appendChild(newFrog);
 }
 
 function addFinish(){
@@ -327,8 +333,10 @@ function reachGoal(rowNumber, player){
         let goalFrog = document.createElement("div");
         goalFrog.classList.add("goal-frog");
         boat.appendChild(goalFrog)
+        updateScore(boat.parentElement, true);
         if(document.querySelectorAll('.bg .goal .finish-empty .goal-frog').length >= 5){
             player.remove();
+            resetScoreRows();
             gameOver();
         }
         else {
@@ -341,7 +349,29 @@ function reachGoal(rowNumber, player){
     }
 }
 
-
+function initScoreBoard(){
+    let board = document.querySelector(".bg .scoreboard");
+    board.innerHTML = "<p>SCORE</p><p class='points'>0</p>";
+}
+function updateScore(row, isGoal=false){
+    let score = document.querySelector(".bg .scoreboard .points");
+    if(isGoal){
+        score.innerHTML = String(parseInt(score.innerHTML) + 50);
+    }
+    else if(!row.classList.contains("reached") && !row.classList.contains("start")){
+        score.innerHTML = String(parseInt(score.innerHTML) + 10);
+    }
+}
+function resetScoreRows(){
+    let rows = document.querySelectorAll('.bg .row.reached');
+    for(let row of rows){
+        row.classList.remove('reached');
+    }
+}
+function resetScore(){
+    let score = document.querySelector(".bg .scoreboard .points");
+    score.innerHTML = "0";
+}
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -372,6 +402,7 @@ function startGame() {
     gameOver.style.display = "none";
     getLife()
     getLife()
+    resetScore();
     respawn()
 }
 
