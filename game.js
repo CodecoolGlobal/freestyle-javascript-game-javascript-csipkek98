@@ -373,6 +373,13 @@ function resetScore(){
     score.innerHTML = "0";
 }
 
+function removeGoalFrog(){
+    let goalFrogs = document.querySelectorAll(".goal-frog")
+    for(let goalFrog of goalFrogs){
+        goalFrog.remove()
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // function start() {
@@ -400,7 +407,7 @@ function startGame() {
     startDiv.style.display = "none";
     // gameCenter.style.display = "block";
     gameOver.style.display = "none";
-    getLife()
+    removeGoalFrog()
     getLife()
     resetScore();
     respawn()
