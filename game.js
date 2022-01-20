@@ -142,6 +142,7 @@ window.addEventListener("keydown", function (event) {
     if (event.keyCode === 39) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
         let frog = document.querySelector('.frog');
+        if(frog){
         let style = frog.currentStyle || window.getComputedStyle(frog);
         let newPos = parseInt(style.marginLeft.replace('px', ''));
         frog.style.marginLeft = String(newPos + 48) + "px";
@@ -149,6 +150,7 @@ window.addEventListener("keydown", function (event) {
         let margin = frog.currentStyle || window.getComputedStyle(frog)
 
       handled = true;
+        }
   }
     //left
     if (event.keyCode === 37) {
@@ -188,13 +190,18 @@ function getTranslateX() {
 }
 function getLife(){
     let lives = document.querySelector(".lives")
+    let lifeFrogs = document.createElement("div");
+    lifeFrogs.classList.add('life');
+    lives.appendChild(lifeFrogs);
     console.log(lives)
     lives.setAttribute("Life","5")
 }
 function lostLife(){
     let lives = document.querySelector(`.lives`)
     let lifeBeforeDmg = lives.getAttribute("Life")
+    const root = document.querySelector(':root');
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
+    root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
     dieAnim()
     if (lives.getAttribute("Life") === "0"){
         gameOver()

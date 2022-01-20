@@ -1,6 +1,10 @@
 :root{
     --frog-margin: 336px;
     --frog-position: fixed;
+    --frog-life: 72px;
+    /*0px = 1 life, 18px = 2 life*/
+
+
 }
 .bg{
     background-image: url("../img/bg.png");
@@ -165,34 +169,9 @@
         height: 40px;
   }
 }
-.lives5{
+.life{
     background: url("../img/life.png");
-    width: 18px;
+    width: var(--frog-life);
     height: 17px;
     position: absolute;
 }
-.lives4{
-    background: url("../img/life.png");
-    width: 18px;
-    height: 17px;
-    position: absolute;
-}
-.lives3{
-    background: url("../img/life.png");
-    width: 18px;
-    height: 17px;
-    position: absolute;
-}
-.lives2{
-    background: url("../img/life.png");
-    width: 18px;
-    height: 17px;
-    position: absolute;
-}
-.lives1{
-    background: url("../img/life.png");
-    width: 18px;
-    height: 17px;
-    position: absolute;
-}
-
