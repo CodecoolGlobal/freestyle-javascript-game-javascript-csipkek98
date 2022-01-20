@@ -140,6 +140,7 @@ function getOffBoat(player, direction){
     jumpBackAndForth(player, direction);
 }
 function jumpBackAndForth(player, direction){
+    let frog = document.querySelector('.frog');
     let row = player.parentElement;
     if(row.classList.contains("object")){
         getOffBoat(player, direction)
@@ -249,28 +250,31 @@ window.addEventListener("keydown", function (event) {
 }, true);}
 
 function getTranslateX() {
-
   let frog = document.querySelector('.frog')
     if (frog && frog.parentElement.classList.contains("road")){
-    let actualRow = frog.parentNode.getAttribute("data-row");
-    let cartype = document.querySelector(`.row[data-row="${actualRow}"]`).getAttribute("cartype")
-    let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
-    for(let car=0; car<cars.length;car++){
-        if(frog.getBoundingClientRect()['x'] < cars[car].getBoundingClientRect()['right']
-            && cars[car].getBoundingClientRect()['right']  < frog.getBoundingClientRect()['right'])
-        {
-            dieAnim();
-            lostLife();
+        let actualRow = frog.parentElement.getAttribute("data-row");
+        let cartype = frog.parentElement.getAttribute("cartype")
+        let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
+        let left = frog.getBoundingClientRect()['x'];
+        let right = frog.getBoundingClientRect()['right'];
+        for(let car of cars){
+            if(left < car.getBoundingClientRect()['right']
+                && car.getBoundingClientRect()['left']  < right)
+            {
+                roadkill();
+            }
         }
-    }
 }
 }
 function getLife(){
     let lives = document.querySelector(".lives")
     let lifeFrogs = document.createElement("div");
+    const root = document.querySelector(':root');
     lifeFrogs.classList.add('life');
     lives.appendChild(lifeFrogs);
     lives.setAttribute("Life","5")
+    root.style.setProperty("--frog-life","72px")
+
 }
 
 function lostLife(){
@@ -280,33 +284,31 @@ function lostLife(){
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
     root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
     if (lives.getAttribute("Life") === "0"){
-        console.log("dead")
         gameOver()
     }else{
-    setTimeout(respawn,1000)}
+    respawn();}
 }
 
-function dieAnim(){
+function roadkill(){
     let frog = document.querySelector('.frog');
     let dieAnim = document.createElement("div");
-    dieAnim.classList.add('dieAnim');
+    dieAnim.classList.add('roadkill');
     frog.parentNode.appendChild(dieAnim);
-    let style = frog.currentStyle || window.getComputedStyle(frog);
-    const root = document.querySelector(':root');
-    root.style.setProperty("--frog-margin", `${style.marginLeft}`)
-    dieAnim.setAttribute("style", "animation: die-on-road 1000ms steps(4);");
     frog.remove()
+    dieAnim.addEventListener("animationend", event => {
+        event.currentTarget.remove();
+        lostLife();
+        event.stopPropagation();
+    })
 }
 function respawn(){
-    let frog = document.querySelector('.frog');
-    let dieAnim = document.querySelector('.dieAnim');
-    dieAnim.remove()
     const root = document.querySelector(':root');
     root.style.setProperty("--frog-margin", `336px`)
     let newFrog = document.createElement("div");
     newFrog.classList.add('frog');
-    document.querySelector('.bg').lastElementChild.appendChild(frog);
+    document.querySelector('.bg').lastElementChild.appendChild(newFrog);
 }
+
 function addFinish(){
     let goal = document.querySelector('.goal')
     for(let i=0;i<5;i++) {
@@ -349,7 +351,9 @@ function startGame() {
     startDiv.style.display = "none";
     // gameCenter.style.display = "block";
     gameOver.style.display = "none";
-    initGame()
+    getLife()
+    getLife()
+    respawn()
 }
 
 function gameOver() {

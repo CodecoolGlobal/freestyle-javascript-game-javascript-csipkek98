@@ -193,27 +193,15 @@
 @keyframes die-on-road{
     0% {
     background-image: url("../img/death_road_0.png");
-        margin-left: var(--frog-margin);
-        width: 40px;
-        height: 40px;
     }
     33%{
     background-image: url("../img/death_road_1.png");
-        margin-left: var(--frog-margin);
-        width: 40px;
-        height: 40px;
     }
     66%{
     background-image: url("../img/death_road_2.png");
-        margin-left: var(--frog-margin);
-        width: 40px;
-        height: 40px;
     }
     100% {
     background-image: url("../img/death_road_3.png");
-        margin-left: var(--frog-margin);
-        width: 40px;
-        height: 40px;
   }
 }
 @keyframes die-on-water{
@@ -233,6 +221,13 @@
     width: 42px;
     height: 40px;
     animation: die-on-water 1s 1 linear;
+}
+.roadkill{
+    position: fixed;
+    margin-left: var(--frog-margin);
+    width: 40px;
+    height: 40px;
+    animation: die-on-road 1s 1 linear;
 }
 .life{
     background: url("../img/life.png");
