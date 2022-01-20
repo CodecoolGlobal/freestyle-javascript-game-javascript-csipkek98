@@ -143,6 +143,30 @@
       transform: rotate(-90deg);
   }
 }
+@keyframes jump_right {
+  0% {
+    background-image: url("../img/frog_0.png");
+      margin-left: var(--frog-margin);
+      transform: rotate(90deg);
+  }
+  100% {
+    background-image: url("../img/frog_1.png");
+      margin-left: var(--frog-margin);
+      transform: rotate(90deg);
+  }
+}
+@keyframes jump_backward {
+  0% {
+    background-image: url("../img/frog_0.png");
+      margin-left: var(--frog-margin);
+      transform: rotate(180deg);
+  }
+100% {
+    background-image: url("../img/frog_1.png");
+    margin-left: var(--frog-margin);
+    transform: rotate(180deg);
+  }
+}
 @keyframes die-on-road{
     0% {
     background-image: url("../img/death_road_0.png");

@@ -94,12 +94,33 @@ let frog = document.createElement("div");
 frog.classList.add('frog');
 document.querySelector('.bg').lastElementChild.appendChild(frog);
 
-// kakás ha nem előre ugrik :/
+
 frog.addEventListener('animationend', (event) => {
-    let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
-    let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-    f.appendChild(event.currentTarget);
-    event.currentTarget.removeAttribute("style");
+    let anim = event.currentTarget.style.animationName;
+    const root = document.querySelector(':root');
+    let frog = document.querySelector('.frog');
+    let style = frog.currentStyle || window.getComputedStyle(frog);
+    if (anim === "jump_forward"){
+        let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
+        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        f.appendChild(event.currentTarget);
+        event.currentTarget.removeAttribute("style");
+    } else if(anim === "jump_backward"){
+        let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) + 1;
+        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        f.appendChild(event.currentTarget);
+        event.currentTarget.removeAttribute("style");
+    } else if(anim === "jump_left"){
+        let newPos = parseInt(style.marginLeft.replace('px', ''));
+        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
+        event.currentTarget.removeAttribute("style");
+    } else if(anim === "jump_right"){
+        let newPos = parseInt(style.marginLeft.replace('px', ''));
+        root.style.setProperty("--frog-margin", `${newPos+48+"px"}`)
+        frog.style.marginLeft = String(newPos + 48) + "px";
+        event.currentTarget.removeAttribute("style");
+    }
+
 });
 
 window.addEventListener("keydown", function (event) {
@@ -107,64 +128,44 @@ window.addEventListener("keydown", function (event) {
     return; // Should do nothing if the default action has been cancelled
   }
 
-  //up
   var handled = false;
+  const root = document.querySelector(':root');
+  let frog = document.querySelector('.frog');
+  let style = frog.currentStyle || window.getComputedStyle(frog);
+  //up
     if (event.keyCode === 38) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
         if(frog){
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) -1;
-        const root = document.querySelector(':root');
         root.style.setProperty("--frog-margin", `${style.marginLeft}`)
         frog.style.animation = 'jump_forward 50ms steps(2);';
         frog.setAttribute("style", "animation: jump_forward 150ms steps(2);");
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
       handled = true;
       }
   }
     //down
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
         if (frog){
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(frog);
-
-        let margin = frog.currentStyle || window.getComputedStyle(frog)
-
+        root.style.setProperty("--frog-margin", `${style.marginLeft}`)
+        frog.style.animation = 'jump_backward 50ms steps(2);';
+        frog.setAttribute("style", "animation: jump_backward 150ms steps(2);");
       handled = true;
         }
   }
     //right
     if (event.keyCode === 39) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
         if(frog){
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        frog.style.marginLeft = String(newPos + 48) + "px";
-
-        let margin = frog.currentStyle || window.getComputedStyle(frog)
-
+        frog.style.animation = 'jump_right 50ms steps(1);';
+        frog.setAttribute("style", "animation: jump_right 150ms steps(2);");
       handled = true;
         }
   }
     //left
     if (event.keyCode === 37) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        const root = document.querySelector(':root');
-        root.style.setProperty("--frog-margin", `${style.marginLeft}`)
         frog.style.animation = 'jump_left 50ms steps(1);';
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
         frog.setAttribute("style", "animation: jump_left 150ms steps(2);");
-
-
       handled = true;
   }
 
@@ -232,5 +233,5 @@ function respawn(){
     document.querySelector('.bg').lastElementChild.appendChild(frog);
 }
 
-setInterval(getTranslateX, 100)
+setInterval(getTranslateX, 1)
 getLife();
