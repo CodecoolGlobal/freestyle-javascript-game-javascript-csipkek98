@@ -1,6 +1,8 @@
 initGame();
 function initGame() {
     drawBoard();
+    animateObject("river", "river");
+    animateObject("road", "car");
 }
 
 function drawBoard() {
@@ -47,47 +49,40 @@ function addRow(gameField, classes="", row=0) {
     return gameField.lastElementChild;
 }
 
-function addCar(road, carnumber=0){
-    let car = document.createElement("div");
-    car.classList.add(`car${carnumber}`);
-    road.appendChild(car);
-    car.addEventListener('animationend', (event) => {
-        event.currentTarget.remove();
-    });
-}
-function addRiverObjects(river, riverNumber=0){
+function addMovingObject(road, className){
     let object = document.createElement("div");
-    object.classList.add(`river${riverNumber}`);
-    river.appendChild(object);
+    object.classList.add(className);
+    road.appendChild(object);
     object.addEventListener('animationend', (event) => {
         event.currentTarget.remove();
     });
+    return object;
 }
 
-let rivers = document.querySelectorAll('.row.river')
-for(let river of rivers){
-    setInterval(function (){
-        setTimeout(function (){
-            let riverType = river.getAttribute("riverType");
-            addRiverObjects(river, parseInt(riverType));
-        }, Math.floor(Math.random()*3000+1000));
-    }, 3000);
+function animateObject(rowType, objectType){
+    let rows = document.querySelectorAll(`.row.${rowType}`)
+    for(let row of rows){
+        let objectNumber = row.getAttribute(`${objectType}Type`);
+        let objectName = `${objectType}${objectNumber}`
+        let minWait = getMinWait(objectName);
+        console.log(minWait)
+        setInterval(function (){
+            setTimeout(function (){
+                let object = addMovingObject(row, objectName);
+            }, minWait + Math.floor(Math.random()*1000));
+        }, minWait+1500);
+    }
 }
 
-
-let roads = document.querySelectorAll('.row.road')
-for(let road of roads)
-{
-    /*road.addEventListener('click', function (event){
-        let carType = event.currentTarget.getAttribute("carType");
-        addCar(event.currentTarget, parseInt(carType));
-    })*/
-    setInterval(function (){
-        setTimeout(function (){
-            let carType = road.getAttribute("carType");
-            addCar(road, parseInt(carType));
-        }, Math.floor(Math.random()*3000+1000));
-    }, 3000);
+function getMinWait(objectName){
+    let object = document.createElement("div");
+    object.classList.add(objectName);
+    document.body.appendChild(object);
+    let style = getComputedStyle(object);
+    let duration = parseInt(style.animationDuration.replace('s', ''))
+    let width = parseInt(style.width);
+    object.remove();
+    return Math.floor(duration * (width));
 }
 
 let frog = document.createElement("div");
