@@ -151,6 +151,7 @@
 100% {
     background-image: url("../img/frog_1.png");
     margin-left: var(--frog-margin);
+    margin-bottom: 50px;
   }
 }
 
@@ -162,7 +163,7 @@
   }
   100% {
     background-image: url("../img/frog_1.png");
-      margin-left: var(--frog-margin);
+      margin-left: calc(var(--frog-margin) - 30px);
       transform: rotate(-90deg);
   }
 }
@@ -174,7 +175,7 @@
   }
   100% {
     background-image: url("../img/frog_1.png");
-      margin-left: var(--frog-margin);
+      margin-left: calc(var(--frog-margin) + 30px);
       transform: rotate(90deg);
   }
 }
@@ -188,6 +189,7 @@
     background-image: url("../img/frog_1.png");
     margin-left: var(--frog-margin);
     transform: rotate(180deg);
+    margin-bottom: -50px;
   }
 }
 @keyframes die-on-road{
@@ -285,21 +287,14 @@ body {
 
 #start a:hover, #game-over a:hover { background-color: #ffffff; color: #1bafdb; }
 
-.finish-empty0{
-    width: 58px;
-    height: 48px;
-    margin-left: 40px;
-    position: relative;
-    align-self: end;
-    display: flex;
+.bg .goal{
+    justify-content: space-around;
 }
-.finish-empty1{
+.finish-empty{
     width: 58px;
     height: 48px;
-    margin-left: 76px;
     position: relative;
     align-self: end;
-    display: flex;
 }
 .goal-frog{
     background-image: url("../img/goal_frog_0.png");
