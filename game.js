@@ -1,3 +1,6 @@
+let loop;
+let fps = 1000/60;
+
 initGame();
 function initGame() {
     drawBoard();
@@ -118,34 +121,43 @@ frog.addEventListener('animationend', (event) => {
     let style = frog.currentStyle || window.getComputedStyle(frog);
     if (anim === "jump_forward"){
         let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        let right = event.currentTarget.getBoundingClientRect()["right"];
-        let left = event.currentTarget.getBoundingClientRect()["left"];
-        if(f.classList.contains("river")){
-            let boat = getBoat(newRow, left, right);
-            if(boat){
-                getOnBoat(boat, event.currentTarget)
+        if (newRow >= 0) {
+            let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+            let right = event.currentTarget.getBoundingClientRect()["right"];
+            let left = event.currentTarget.getBoundingClientRect()["left"];
+            if(f.classList.contains("river")){
+                let boat = getBoat(newRow, left, right);
+                if(boat){
+                    getOnBoat(boat, event.currentTarget)
+                }
             }
-        }
-        else {
-            f.appendChild(event.currentTarget);
-        }
+            else {
+                f.appendChild(event.currentTarget);
+            }
 
-        event.currentTarget.removeAttribute("style");
+            event.currentTarget.removeAttribute("style");
+        }
     } else if(anim === "jump_backward"){
         let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) + 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(event.currentTarget);
-        event.currentTarget.removeAttribute("style");
+        console.log(newRow)
+        if (newRow <= 14){
+            let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+            f.appendChild(event.currentTarget);
+            event.currentTarget.removeAttribute("style");
+        }
     } else if(anim === "jump_left"){
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
-        event.currentTarget.removeAttribute("style");
+        let newPos = parseInt(style.marginLeft.replace('px', ''))-48;
+        if(newPos >= 0) {
+            root.style.setProperty("--frog-margin", `${newPos + "px"}`)
+            event.currentTarget.removeAttribute("style");
+        }
     } else if(anim === "jump_right"){
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        root.style.setProperty("--frog-margin", `${newPos+48+"px"}`)
-        frog.style.marginLeft = String(newPos + 48) + "px";
-        event.currentTarget.removeAttribute("style");
+        let newPos = parseInt(style.marginLeft.replace('px', ''))+48;
+        if(newPos < 672){
+            root.style.setProperty("--frog-margin", `${newPos+"px"}`)
+            frog.style.marginLeft = String(newPos + 48) + "px";
+            event.currentTarget.removeAttribute("style");
+        }
     }
 
 });
@@ -224,6 +236,7 @@ function getLife(){
     console.log(lives)
     lives.setAttribute("Life","5")
 }
+
 function lostLife(){
     let lives = document.querySelector(`.lives`)
     let lifeBeforeDmg = lives.getAttribute("Life")
@@ -236,9 +249,7 @@ function lostLife(){
     }else{
     setTimeout(respawn,1000)}
 }
-function gameOver(){
-    console.log("dead")
-}
+
 function dieAnim(){
     let frog = document.querySelector('.frog');
     let dieAnim = document.createElement("div");
@@ -262,3 +273,43 @@ function respawn(){
 
 setInterval(getTranslateX, 1)
 getLife();
+
+//////////////////////////////////////////////////////////////////////////
+function start() {
+    initGame();
+    loop = setInterval(update, fps);
+}
+
+function update() {
+    drawBoard();
+}
+
+function launchIfReady() {
+    let startDiv = document.getElementById("start");
+    let gameCenter = document.getElementsByClassName("game-center");
+    let gameOver = document.getElementById("game-over");
+    startDiv.style.display = "block";
+    gameCenter.style.display = "none";
+    gameOver.style.display = "none";
+}
+
+function startGame() {
+    let startDiv = document.getElementById("start");
+    let gameCenter = document.getElementsByClassName("game-center");
+    let gameOver = document.getElementById("game-over");
+    startDiv.style.display = "none";
+    gameCenter.style.display = "block";
+    gameOver.style.display = "none";
+    start();
+}
+
+function gameOver() {
+    let startDiv = document.getElementById("start");
+    let gameCenter = document.getElementsByClassName("game-center");
+    let gameOver = document.getElementById("game-over");
+    startDiv.style.display = "none";
+    gameCenter.style.display = "none";
+    gameOver.style.display = "block";
+
+    clearInterval(loop);
+}
