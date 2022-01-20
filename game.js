@@ -100,23 +100,32 @@ frog.addEventListener('animationend', (event) => {
     let style = frog.currentStyle || window.getComputedStyle(frog);
     if (anim === "jump_forward"){
         let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(event.currentTarget);
-        event.currentTarget.removeAttribute("style");
+        if (newRow >= 0) {
+            let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+            f.appendChild(event.currentTarget);
+            event.currentTarget.removeAttribute("style");
+        }
     } else if(anim === "jump_backward"){
         let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) + 1;
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(event.currentTarget);
-        event.currentTarget.removeAttribute("style");
+        console.log(newRow)
+        if (newRow <= 14){
+            let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+            f.appendChild(event.currentTarget);
+            event.currentTarget.removeAttribute("style");
+        }
     } else if(anim === "jump_left"){
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
-        event.currentTarget.removeAttribute("style");
+        let newPos = parseInt(style.marginLeft.replace('px', ''))-48;
+        if(newPos >= 0) {
+            root.style.setProperty("--frog-margin", `${newPos + "px"}`)
+            event.currentTarget.removeAttribute("style");
+        }
     } else if(anim === "jump_right"){
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        root.style.setProperty("--frog-margin", `${newPos+48+"px"}`)
-        frog.style.marginLeft = String(newPos + 48) + "px";
-        event.currentTarget.removeAttribute("style");
+        let newPos = parseInt(style.marginLeft.replace('px', ''))+48;
+        if(newPos < 672){
+            root.style.setProperty("--frog-margin", `${newPos+"px"}`)
+            frog.style.marginLeft = String(newPos + 48) + "px";
+            event.currentTarget.removeAttribute("style");
+        }
     }
 
 });
