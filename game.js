@@ -130,20 +130,20 @@ function getOnBoat(rowNumber, player){
     }
 }
 
-function getOffBoat(player, direction){
+function getOffBoat(player){
     let playerLeft = player.getBoundingClientRect()["left"];
     let rowLeft = player.parentElement.parentElement.getBoundingClientRect()["left"];
     const root = document.querySelector(':root');
     let newPos = parseInt(playerLeft) - parseInt(rowLeft);
     player.parentNode.parentNode.appendChild(player);
     root.style.setProperty("--frog-margin", `${newPos+"px"}`);
-    jumpBackAndForth(player, direction);
 }
 function jumpBackAndForth(player, direction){
     let frog = document.querySelector('.frog');
     let row = player.parentElement;
     if(row.classList.contains("object")){
-        getOffBoat(player, direction)
+        getOffBoat(player)
+        jumpBackAndForth(player, direction);
     }
     else {
         let newRow = parseInt(row.getAttribute("data-row")) - direction;
@@ -176,9 +176,17 @@ function jumpLeftAndRight(player, direction){
     const root = document.querySelector(':root');
     let oldPos = window.getComputedStyle(root).getPropertyValue("--frog-margin");
     let newPos = parseInt(oldPos.replace('px', ''))-48*direction;
-    if(0 <= newPos && newPos < 672) {
+    let parentStyle = window.getComputedStyle(player.parentElement);
+    let border = parseInt(parentStyle.getPropertyValue("width").replace('px', ''))
+    if(0 <= newPos && newPos < border) {
         root.style.setProperty("--frog-margin", `${newPos + "px"}`)
         player.removeAttribute("style");
+    }
+    else{
+        if(player.parentElement.classList.contains("object")){
+            getOffBoat(player);
+            drown(player);
+        }
     }
 }
 function moveFrog(){
