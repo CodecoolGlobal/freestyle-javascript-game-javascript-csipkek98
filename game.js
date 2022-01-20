@@ -1,6 +1,8 @@
 initGame();
 function initGame() {
     drawBoard();
+    animateObject("river", "river");
+    animateObject("road", "car");
 }
 
 function drawBoard() {
@@ -47,59 +49,73 @@ function addRow(gameField, classes="", row=0) {
     return gameField.lastElementChild;
 }
 
-function addCar(road, carnumber=0){
-    let car = document.createElement("div");
-    car.classList.add(`car${carnumber}`);
-    road.appendChild(car);
-    car.addEventListener('animationend', (event) => {
-        event.currentTarget.remove();
-    });
-}
-function addRiverObjects(river, riverNumber=0){
+function addMovingObject(road, className){
     let object = document.createElement("div");
-    object.classList.add(`river${riverNumber}`);
-    river.appendChild(object);
+    object.classList.add(className);
+    road.appendChild(object);
     object.addEventListener('animationend', (event) => {
         event.currentTarget.remove();
     });
+    return object;
 }
 
-let rivers = document.querySelectorAll('.row.river')
-for(let river of rivers){
-    setInterval(function (){
-        setTimeout(function (){
-            let riverType = river.getAttribute("riverType");
-            addRiverObjects(river, parseInt(riverType));
-        }, Math.floor(Math.random()*3000+1000));
-    }, 3000);
+function animateObject(rowType, objectType){
+    let rows = document.querySelectorAll(`.row.${rowType}`)
+    for(let row of rows){
+        let objectNumber = row.getAttribute(`${objectType}Type`);
+        let objectName = `${objectType}${objectNumber}`
+        let minWait = getMinWait(objectName);
+        console.log(minWait)
+        setInterval(function (){
+            setTimeout(function (){
+                let object = addMovingObject(row, objectName);
+            }, minWait + Math.floor(Math.random()*1000));
+        }, minWait+1500);
+    }
 }
 
-
-let roads = document.querySelectorAll('.row.road')
-for(let road of roads)
-{
-    /*road.addEventListener('click', function (event){
-        let carType = event.currentTarget.getAttribute("carType");
-        addCar(event.currentTarget, parseInt(carType));
-    })*/
-    setInterval(function (){
-        setTimeout(function (){
-            let carType = road.getAttribute("carType");
-            addCar(road, parseInt(carType));
-        }, Math.floor(Math.random()*3000+1000));
-    }, 3000);
+function getMinWait(objectName){
+    let object = document.createElement("div");
+    object.classList.add(objectName);
+    document.body.appendChild(object);
+    let style = getComputedStyle(object);
+    let duration = parseInt(style.animationDuration.replace('s', ''))
+    let width = parseInt(style.width);
+    object.remove();
+    return Math.floor(duration * (width));
 }
 
 let frog = document.createElement("div");
 frog.classList.add('frog');
 document.querySelector('.bg').lastElementChild.appendChild(frog);
 
-// kakás ha nem előre ugrik :/
+
 frog.addEventListener('animationend', (event) => {
-    let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
-    let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-    f.appendChild(event.currentTarget);
-    event.currentTarget.removeAttribute("style");
+    let anim = event.currentTarget.style.animationName;
+    const root = document.querySelector(':root');
+    let frog = document.querySelector('.frog');
+    let style = frog.currentStyle || window.getComputedStyle(frog);
+    if (anim === "jump_forward"){
+        let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
+        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        f.appendChild(event.currentTarget);
+        event.currentTarget.removeAttribute("style");
+    } else if(anim === "jump_backward"){
+        let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) + 1;
+        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
+        f.appendChild(event.currentTarget);
+        event.currentTarget.removeAttribute("style");
+    } else if(anim === "jump_left"){
+        let newPos = parseInt(style.marginLeft.replace('px', ''));
+        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
+        event.currentTarget.removeAttribute("style");
+    } else if(anim === "jump_right"){
+        let newPos = parseInt(style.marginLeft.replace('px', ''));
+        root.style.setProperty("--frog-margin", `${newPos+48+"px"}`)
+        frog.style.marginLeft = String(newPos + 48) + "px";
+        event.currentTarget.removeAttribute("style");
+    }
+
 });
 
 window.addEventListener("keydown", function (event) {
@@ -107,62 +123,44 @@ window.addEventListener("keydown", function (event) {
     return; // Should do nothing if the default action has been cancelled
   }
 
-  //up
   var handled = false;
+  const root = document.querySelector(':root');
+  let frog = document.querySelector('.frog');
+  let style = frog.currentStyle || window.getComputedStyle(frog);
+  //up
     if (event.keyCode === 38) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
         if(frog){
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) -1;
-        const root = document.querySelector(':root');
         root.style.setProperty("--frog-margin", `${style.marginLeft}`)
         frog.style.animation = 'jump_forward 50ms steps(2);';
         frog.setAttribute("style", "animation: jump_forward 150ms steps(2);");
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
       handled = true;
       }
   }
     //down
     if (event.keyCode === 40) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
         if (frog){
-        let newRow = parseInt(frog.parentNode.getAttribute("data-row")) + 1;
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(frog);
-
-        let margin = frog.currentStyle || window.getComputedStyle(frog)
-
+        root.style.setProperty("--frog-margin", `${style.marginLeft}`)
+        frog.style.animation = 'jump_backward 50ms steps(2);';
+        frog.setAttribute("style", "animation: jump_backward 150ms steps(2);");
       handled = true;
         }
   }
     //right
     if (event.keyCode === 39) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        frog.style.marginLeft = String(newPos + 48) + "px";
-
-        let margin = frog.currentStyle || window.getComputedStyle(frog)
-
+        if(frog){
+        frog.style.animation = 'jump_right 50ms steps(1);';
+        frog.setAttribute("style", "animation: jump_right 150ms steps(2);");
       handled = true;
+        }
   }
     //left
     if (event.keyCode === 37) {
     // Handle the event with KeyboardEvent.keyCode and set handled true.
-        let frog = document.querySelector('.frog');
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        const root = document.querySelector(':root');
-        root.style.setProperty("--frog-margin", `${style.marginLeft}`)
         frog.style.animation = 'jump_left 50ms steps(1);';
-        let newPos = parseInt(style.marginLeft.replace('px', ''));
-        root.style.setProperty("--frog-margin", `${newPos-48+"px"}`)
         frog.setAttribute("style", "animation: jump_left 150ms steps(2);");
-
-
       handled = true;
   }
 
@@ -188,13 +186,18 @@ function getTranslateX() {
 }
 function getLife(){
     let lives = document.querySelector(".lives")
+    let lifeFrogs = document.createElement("div");
+    lifeFrogs.classList.add('life');
+    lives.appendChild(lifeFrogs);
     console.log(lives)
     lives.setAttribute("Life","5")
 }
 function lostLife(){
     let lives = document.querySelector(`.lives`)
     let lifeBeforeDmg = lives.getAttribute("Life")
+    const root = document.querySelector(':root');
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
+    root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
     dieAnim()
     if (lives.getAttribute("Life") === "0"){
         gameOver()
@@ -225,7 +228,7 @@ function respawn(){
     document.querySelector('.bg').lastElementChild.appendChild(frog);
 }
 
-setInterval(getTranslateX, 100)
+setInterval(getTranslateX, 1)
 getLife();
 
 

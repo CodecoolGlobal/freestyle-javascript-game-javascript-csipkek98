@@ -1,6 +1,10 @@
 :root{
     --frog-margin: 336px;
     --frog-position: fixed;
+    --frog-life: 72px;
+    /*0px = 1 life, 18px = 2 life*/
+
+
 }
 .bg{
     background-image: url("../img/bg.png");
@@ -139,6 +143,30 @@
       transform: rotate(-90deg);
   }
 }
+@keyframes jump_right {
+  0% {
+    background-image: url("../img/frog_0.png");
+      margin-left: var(--frog-margin);
+      transform: rotate(90deg);
+  }
+  100% {
+    background-image: url("../img/frog_1.png");
+      margin-left: var(--frog-margin);
+      transform: rotate(90deg);
+  }
+}
+@keyframes jump_backward {
+  0% {
+    background-image: url("../img/frog_0.png");
+      margin-left: var(--frog-margin);
+      transform: rotate(180deg);
+  }
+100% {
+    background-image: url("../img/frog_1.png");
+    margin-left: var(--frog-margin);
+    transform: rotate(180deg);
+  }
+}
 @keyframes die-on-road{
     0% {
     background-image: url("../img/death_road_0.png");
@@ -165,24 +193,13 @@
         height: 40px;
   }
 }
-.lives5{
+.life{
     background: url("../img/life.png");
-    width: 18px;
+    width: var(--frog-life);
     height: 17px;
     position: absolute;
 }
-.lives4{
-    background: url("../img/life.png");
-    width: 18px;
-    height: 17px;
-    position: absolute;
-}
-.lives3{
-    background: url("../img/life.png");
-    width: 18px;
-    height: 17px;
-    position: absolute;
-}
+
 .lives2{
     background: url("../img/life.png");
     width: 18px;
