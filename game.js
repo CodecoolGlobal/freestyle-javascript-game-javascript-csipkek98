@@ -178,7 +178,7 @@ function jumpLeftAndRight(player, direction){
     let newPos = parseInt(oldPos.replace('px', ''))-48*direction;
     let parentStyle = window.getComputedStyle(player.parentElement);
     let border = parseInt(parentStyle.getPropertyValue("width").replace('px', ''))
-    if(0 <= newPos && newPos < border) {
+    if(0 <= newPos + 24 && newPos < border - 24) {
         root.style.setProperty("--frog-margin", `${newPos + "px"}`)
         player.removeAttribute("style");
     }
