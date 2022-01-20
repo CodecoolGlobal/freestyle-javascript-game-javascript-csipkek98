@@ -227,3 +227,25 @@ function respawn(){
 
 setInterval(getTranslateX, 100)
 getLife();
+
+
+function startGame() {
+    let startDiv = document.getElementById("start");
+    let gameCenter = document.getElementsByClassName("game-center");
+    let gameOver = document.getElementById("game-over");
+    startDiv.style.display = "none";
+    gameCenter.style.display = "block";
+    gameOver.style.display = "none";
+    start();
+}
+
+function gameOver() {
+    let startDiv = document.getElementById("start");
+    let gameCenter = document.getElementsByClassName("game-center");
+    let gameOver = document.getElementById("game-over");
+    startDiv.style.display = "none";
+    gameCenter.style.display = "none";
+    gameOver.style.display = "block";
+
+    clearInterval(loop);
+}
