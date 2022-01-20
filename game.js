@@ -262,7 +262,7 @@ function getTranslateX() {
         let actualRow = frog.parentElement.getAttribute("data-row");
         let cartype = frog.parentElement.getAttribute("cartype")
         let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
-        let left = frog.getBoundingClientRect()['x'];
+        let left = frog.getBoundingClientRect()['left'];
         let right = frog.getBoundingClientRect()['right'];
         for(let car of cars){
             if(left < car.getBoundingClientRect()['right']
