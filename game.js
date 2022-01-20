@@ -65,7 +65,6 @@ function animateObject(rowType, objectType){
         let objectNumber = row.getAttribute(`${objectType}Type`);
         let objectName = `${objectType}${objectNumber}`
         let minWait = getMinWait(objectName);
-        console.log(minWait)
         setInterval(function (){
             setTimeout(function (){
                 let object = addMovingObject(row, objectName);
@@ -89,7 +88,29 @@ let frog = document.createElement("div");
 frog.classList.add('frog');
 document.querySelector('.bg').lastElementChild.appendChild(frog);
 
+function getBoat(rowNumber, playerLeft, playerRight){
+    let row = document.querySelector(`.game-center .bg .row[data-row="${rowNumber}"]`);
+    let boats = row.children;
+    for(let boat of boats){
+        let right = boat.getBoundingClientRect()["right"];
+        let left = boat.getBoundingClientRect()["left"];
+        if(left <= playerLeft && right >= playerRight){
+            return boat;
+        }
+    }
+    return null;
+}
+function getOnBoat(boat, player){
+    let boatRight = boat.getBoundingClientRect()["right"];
+    let boatLeft = boat.getBoundingClientRect()["left"];
+    let playerRight = player.getBoundingClientRect()["right"];
+    let playerLeft = player.getBoundingClientRect()["left"];
+    const root = document.querySelector(':root');
+    let newPos = parseInt(playerLeft) - parseInt(boatLeft);
+    boat.appendChild(player);
+    root.style.setProperty("--frog-margin", `${newPos+"px"}`);
 
+}
 frog.addEventListener('animationend', (event) => {
     let anim = event.currentTarget.style.animationName;
     const root = document.querySelector(':root');
@@ -98,7 +119,18 @@ frog.addEventListener('animationend', (event) => {
     if (anim === "jump_forward"){
         let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) - 1;
         let f = document.querySelector('.game-center .bg .row[data-row=' + CSS.escape(String(newRow)) + ']');
-        f.appendChild(event.currentTarget);
+        let right = event.currentTarget.getBoundingClientRect()["right"];
+        let left = event.currentTarget.getBoundingClientRect()["left"];
+        if(f.classList.contains("river")){
+            let boat = getBoat(newRow, left, right);
+            if(boat){
+                getOnBoat(boat, event.currentTarget)
+            }
+        }
+        else {
+            f.appendChild(event.currentTarget);
+        }
+
         event.currentTarget.removeAttribute("style");
     } else if(anim === "jump_backward"){
         let newRow = parseInt(event.currentTarget.parentNode.getAttribute("data-row")) + 1;
@@ -173,7 +205,7 @@ window.addEventListener("keydown", function (event) {
 function getTranslateX() {
 
   let frog = document.querySelector('.frog')
-    if (frog){
+    if (frog && frog.parentElement.classList.contains("road")){
     let actualRow = frog.parentNode.getAttribute("data-row");
     let cartype = document.querySelector(`.row[data-row="${actualRow}"]`).getAttribute("cartype")
     let cars = document.querySelectorAll(`.row[data-row="${actualRow}"] .car${cartype}`)
