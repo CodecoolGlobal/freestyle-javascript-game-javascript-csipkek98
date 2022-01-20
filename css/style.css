@@ -78,13 +78,13 @@
     background-image: url("../img/log_1.png");
     width: 144px;
     height: 32px;
-    animation: moveRight 15s 1 linear;
+    animation: moveRight 12s 1 linear;
 }
 .river1{
     background-image: url("../img/turtle_two_0.png");
     width: 82px;
     height: 32px;
-    animation: moveLeft 15s 1 linear, swimming2 1500ms infinite linear;
+    animation: moveLeft 12s 1 linear, swimming2 1500ms infinite linear;
 }
 .river2{
     background-image: url("../img/log_2.png");
@@ -96,13 +96,13 @@
     background-image: url("../img/log_0.png");
     width: 96px;
     height: 32px;
-    animation: moveRight 15s 1 linear;
+    animation: moveRight 12s 1 linear;
 }
 .river4{
     background-image: url("../img/turtle_three_0.png");
     width: 124px;
     height: 32px;
-    animation: moveLeft 15s 1 linear, swimming3 1500ms infinite linear;
+    animation: moveLeft 12s 1 linear, swimming3 1500ms infinite linear;
 }
 @keyframes moveRight {
   from {
@@ -253,7 +253,8 @@
 
 body {
     color: #ffffff;
-    background-color:#1bafdb;
+    /*background-color:#1bafdb;*/
+    background-color: black;
 }
 
 #start, #game-over {
