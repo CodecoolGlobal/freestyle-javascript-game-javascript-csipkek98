@@ -183,6 +183,7 @@ function jumpLeftAndRight(player, direction){
 }
 function moveFrog(){
 let frog = document.querySelector('.frog');
+if(frog){
 frog.addEventListener('animationend', (event) => {
     let anim = event.currentTarget.style.animationName;
     if (anim === "jump_forward"){
@@ -196,7 +197,7 @@ frog.addEventListener('animationend', (event) => {
     }
     event.stopPropagation();
 });
-
+}
 }
 function frogAnim(){
 window.addEventListener("keydown", function (event) {
