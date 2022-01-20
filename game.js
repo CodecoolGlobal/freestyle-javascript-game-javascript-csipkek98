@@ -60,6 +60,7 @@ function addMovingObject(road, className){
     road.appendChild(object);
     object.addEventListener('animationend', (event) => {
         event.currentTarget.remove();
+        event.stopPropagation();
     });
     return object;
 }
@@ -115,23 +116,23 @@ function getOnBoat(boat, player){
     root.style.setProperty("--frog-margin", `${newPos+"px"}`);
 }
 
-function getOffBoat(player, border){
+function getOffBoat(player, direction){
     let playerLeft = player.getBoundingClientRect()["left"];
     let rowLeft = player.parentElement.parentElement.getBoundingClientRect()["left"];
     const root = document.querySelector(':root');
     let newPos = parseInt(playerLeft) - parseInt(rowLeft);
-    player.parentElement.parentElement.appendChild(player);
+    player.parentNode.parentNode.appendChild(player);
     root.style.setProperty("--frog-margin", `${newPos+"px"}`);
-    jumpBackAndForth(player, border);
+    jumpBackAndForth(player, direction);
 }
-function jumpBackAndForth(player, border){
+function jumpBackAndForth(player, direction){
     let row = player.parentElement;
     if(row.classList.contains("object")){
-        getOffBoat(player, border)
+        getOffBoat(player, direction)
     }
     else {
-        let newRow = parseInt(player.parentNode.getAttribute("data-row")) - 1;
-        if (newRow >= border) {
+        let newRow = parseInt(row.getAttribute("data-row")) - direction;
+        if ([...Array(15).keys()].includes(newRow)) {
             let field = document.querySelector(`.game-center .bg .row[data-row="${newRow}"]`);
             let right = player.getBoundingClientRect()["right"];
             let left = player.getBoundingClientRect()["left"];
@@ -155,9 +156,9 @@ frog.addEventListener('animationend', (event) => {
     let frog = document.querySelector('.frog');
     let style = frog.currentStyle || window.getComputedStyle(frog);
     if (anim === "jump_forward"){
-        jumpBackAndForth(event.currentTarget, 0);
+        jumpBackAndForth(event.currentTarget, 1);
     } else if(anim === "jump_backward"){
-        jumpBackAndForth(event.currentTarget, 14);
+        jumpBackAndForth(event.currentTarget, -1);
     } else if(anim === "jump_left"){
         let newPos = parseInt(style.marginLeft.replace('px', ''))-48;
         if(newPos >= 0) {
@@ -172,7 +173,7 @@ frog.addEventListener('animationend', (event) => {
             event.currentTarget.removeAttribute("style");
         }
     }
-
+    event.stopPropagation();
 });
 
 window.addEventListener("keydown", function (event) {
