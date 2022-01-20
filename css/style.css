@@ -294,6 +294,9 @@ body {
     height: 48px;
     position: relative;
     align-self: end;
+    display: flex;
+    justify-content: center;
+    flex-flow: row;
 }
 .goal-frog{
     background-image: url("../img/goal_frog_0.png");
