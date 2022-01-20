@@ -171,35 +171,33 @@ function drown(player){
     })
     row.appendChild(drowning);
 }
-function moveFrog(){
-    let frog = document.querySelector('.frog');
-    if(frog){
-    frog.addEventListener('animationend', (event) => {
-        let anim = event.currentTarget.style.animationName;
-        const root = document.querySelector(':root');
-        let frog = event.currentTarget;
-        let style = frog.currentStyle || window.getComputedStyle(frog);
-        if (anim === "jump_forward") {
-            jumpBackAndForth(event.currentTarget, 1);
-        } else if (anim === "jump_backward") {
-            jumpBackAndForth(event.currentTarget, -1);
-        } else if (anim === "jump_left") {
-            let newPos = parseInt(style.marginLeft.replace('px', '')) - 48;
-            if (newPos >= 0) {
-                root.style.setProperty("--frog-margin", `${newPos + "px"}`)
-                event.currentTarget.removeAttribute("style");
-            }
-        } else if (anim === "jump_right") {
-            let newPos = parseInt(style.marginLeft.replace('px', '')) + 48;
-            if (newPos < 672) {
-                root.style.setProperty("--frog-margin", `${newPos + "px"}`)
-                frog.style.marginLeft = String(newPos + 48) + "px";
-                event.currentTarget.removeAttribute("style");
-            }
-        }
-        event.stopPropagation();
 
-});}}
+function jumpLeftAndRight(player, direction){
+    const root = document.querySelector(':root');
+    let oldPos = window.getComputedStyle(root).getPropertyValue("--frog-margin");
+    let newPos = parseInt(oldPos.replace('px', ''))-48*direction;
+    if(0 <= newPos && newPos < 672) {
+        root.style.setProperty("--frog-margin", `${newPos + "px"}`)
+        player.removeAttribute("style");
+    }
+}
+function moveFrog(){
+let frog = document.querySelector('.frog');
+frog.addEventListener('animationend', (event) => {
+    let anim = event.currentTarget.style.animationName;
+    if (anim === "jump_forward"){
+        jumpBackAndForth(event.currentTarget, 1);
+    } else if(anim === "jump_backward"){
+        jumpBackAndForth(event.currentTarget, -1);
+    } else if(anim === "jump_left"){
+        jumpLeftAndRight(event.currentTarget, 1);
+    } else if(anim === "jump_right"){
+        jumpLeftAndRight(event.currentTarget, -1);
+    }
+    event.stopPropagation();
+});
+
+}
 function frogAnim(){
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
