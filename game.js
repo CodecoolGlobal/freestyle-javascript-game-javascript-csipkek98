@@ -5,7 +5,11 @@ initGame();
 function initGame() {
     drawBoard();
     addFinish();
-    spawnFrog();
+    getLife();
+    setTimeout(spawnFrog,2500)
+    frogAnim();
+    setInterval(moveFrog,100)
+    setInterval(getTranslateX, 1)
     animateObject("river", "river");
     animateObject("road", "car");
 }
@@ -166,33 +170,36 @@ function drown(player){
     })
     row.appendChild(drowning);
 }
-let frog = document.querySelector('.frog');
-frog.addEventListener('animationend', (event) => {
-    let anim = event.currentTarget.style.animationName;
-    const root = document.querySelector(':root');
-    let frog = event.currentTarget;
-    let style = frog.currentStyle || window.getComputedStyle(frog);
-    if (anim === "jump_forward"){
-        jumpBackAndForth(event.currentTarget, 1);
-    } else if(anim === "jump_backward"){
-        jumpBackAndForth(event.currentTarget, -1);
-    } else if(anim === "jump_left"){
-        let newPos = parseInt(style.marginLeft.replace('px', ''))-48;
-        if(newPos >= 0) {
-            root.style.setProperty("--frog-margin", `${newPos + "px"}`)
-            event.currentTarget.removeAttribute("style");
+function moveFrog(){
+    let frog = document.querySelector('.frog');
+    if(frog){
+    frog.addEventListener('animationend', (event) => {
+        let anim = event.currentTarget.style.animationName;
+        const root = document.querySelector(':root');
+        let frog = event.currentTarget;
+        let style = frog.currentStyle || window.getComputedStyle(frog);
+        if (anim === "jump_forward") {
+            jumpBackAndForth(event.currentTarget, 1);
+        } else if (anim === "jump_backward") {
+            jumpBackAndForth(event.currentTarget, -1);
+        } else if (anim === "jump_left") {
+            let newPos = parseInt(style.marginLeft.replace('px', '')) - 48;
+            if (newPos >= 0) {
+                root.style.setProperty("--frog-margin", `${newPos + "px"}`)
+                event.currentTarget.removeAttribute("style");
+            }
+        } else if (anim === "jump_right") {
+            let newPos = parseInt(style.marginLeft.replace('px', '')) + 48;
+            if (newPos < 672) {
+                root.style.setProperty("--frog-margin", `${newPos + "px"}`)
+                frog.style.marginLeft = String(newPos + 48) + "px";
+                event.currentTarget.removeAttribute("style");
+            }
         }
-    } else if(anim === "jump_right"){
-        let newPos = parseInt(style.marginLeft.replace('px', ''))+48;
-        if(newPos < 672){
-            root.style.setProperty("--frog-margin", `${newPos+"px"}`)
-            frog.style.marginLeft = String(newPos + 48) + "px";
-            event.currentTarget.removeAttribute("style");
-        }
-    }
-    event.stopPropagation();
-});
+        event.stopPropagation();
 
+});}}
+function frogAnim(){
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Should do nothing if the default action has been cancelled
@@ -239,7 +246,7 @@ window.addEventListener("keydown", function (event) {
           event.preventDefault();
       }
   }
-}, true);
+}, true);}
 
 function getTranslateX() {
 
@@ -291,6 +298,7 @@ function dieAnim(){
     frog.remove()
 }
 function respawn(){
+    let frog = document.querySelector('.frog');
     let dieAnim = document.querySelector('.dieAnim');
     dieAnim.remove()
     const root = document.querySelector(':root');
@@ -312,8 +320,8 @@ function addFinish(){
     }
 }
 
-setInterval(getTranslateX, 1)
-getLife();
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // function start() {
@@ -341,8 +349,7 @@ function startGame() {
     startDiv.style.display = "none";
     // gameCenter.style.display = "block";
     gameOver.style.display = "none";
-    getLife()
-    spawnFrog()
+    initGame()
 }
 
 function gameOver() {
