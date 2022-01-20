@@ -1,3 +1,5 @@
+let loop;
+
 initGame();
 function initGame() {
     drawBoard();
