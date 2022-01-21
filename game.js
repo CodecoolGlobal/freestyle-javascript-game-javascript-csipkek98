@@ -67,6 +67,7 @@ function addMovingObject(road, className){
         event.currentTarget.remove();
         event.stopPropagation();
     });
+
     return object;
 }
 
@@ -100,6 +101,7 @@ function spawnFrog(){
     frog.classList.add('frog');
     moveFrog(frog);
     document.querySelector('.bg .start').appendChild(frog);
+    handleOutOfBoundary();
 }
 
 function getBoat(rowNumber, playerLeft, playerRight){
@@ -277,7 +279,7 @@ function lostLife(){
     const root = document.querySelector(':root');
     lives.setAttribute("Life",`${lifeBeforeDmg-1}`)
     root.style.setProperty("--frog-life", `${18*(lifeBeforeDmg-2)}px`)
-    if (lives.getAttribute("Life") === "0"){
+    if (parseInt(lives.getAttribute("Life")) <= 0){
         gameOver();
     }else{
     respawn();}
@@ -380,6 +382,33 @@ function removeGoalFrog(){
     }
 }
 
+function handleOutOfBoundary(){
+    var parent = document.querySelector(".bg");
+
+    const observer = new MutationObserver(function(mutations, observer) {
+        let frog = document.querySelector('.frog');
+        let deathWater = document.querySelector('.drown');
+        let deathRoad = document.querySelector('.roadkill');
+        if(!document.body.contains(frog) &&
+            (!document.body.contains(deathWater) && !document.body.contains(deathRoad))){
+            lostLife();
+        }
+        let gameOver = document.getElementById("game-over");
+        if(gameOver.style.display === "block"){
+            observer.disconnect();
+        }
+    });
+
+    // configuration of the observer:
+    var config = {
+      childList: true,
+        subtree: true
+    };
+
+    observer.observe(parent, config);
+
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // function start() {
@@ -411,6 +440,7 @@ function startGame() {
     getLife()
     resetScore();
     respawn()
+    handleOutOfBoundary();
 }
 
 function gameOver() {
