@@ -80,7 +80,7 @@ function animateObject(rowType, objectType){
         setInterval(function (){
             setTimeout(function (){
                 let object = addMovingObject(row, objectName);
-            }, minWait + Math.floor(Math.random()*1000));
+            }, minWait + Math.floor(Math.random()*2000));
         }, minWait+1500);
     }
 }
